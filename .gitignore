@@ -1,0 +1,6 @@
+# Mac OS Ignores
+.DS_Store
+
+# Ignore RubyMine's project folder
+/.idea
+
