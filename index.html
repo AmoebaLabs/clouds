@@ -1,16 +1,4 @@
-<html>
-	<head>
-	<meta charset="utf-8" />
-	<title>CSS 3D Clouds</title>
 
-    <link href='http://fonts.googleapis.com/css?family=Lato:900' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-	<link href='buttons.css' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="clouds.css">
-
-    </head>
-	<body>
-	
 	<div id="viewport" >
 		<div id="world" >
 		</div>
@@ -405,7 +393,6 @@
 		event = event ? event : window.event;
 		d = d - ( event.detail ? event.detail * -5 : event.wheelDelta / 8 );
 		updateView();
-		
 	}
 	
 	function orientationhandler( e ){
@@ -421,7 +408,6 @@
 		worldXAngle = y;
 		worldYAngle = x;
 		updateView();
-		
 	}
 	
 	function update (){
@@ -437,15 +423,9 @@
 		}
 		
 		requestAnimationFrame( update );
-		
 	}
 	
 	update();
 
 	</script>
-	
-	<script type="text/javascript">/* CloudFlare analytics upgrade */
-</script>
-	
-	</body>
-</html>
+
