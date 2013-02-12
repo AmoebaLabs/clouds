@@ -61,7 +61,7 @@ class window.AmoebaCD.Clouds
       cloud = document.createElement("img")
       cloud.style.opacity = 0
       r = Math.random()
-      src = "troll.png"
+      src = "troll.png"     # SNG need this image, or fix code
       k = 0
 
       while k < @computedWeights.length
@@ -99,7 +99,7 @@ class window.AmoebaCD.Clouds
       @layers.push cloud
 
       j++
-    div
+    return div
 
   setup: () =>
 
