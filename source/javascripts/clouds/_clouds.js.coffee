@@ -169,8 +169,6 @@ class window.AmoebaCD.Clouds
         this._updateView()
       e.preventDefault()
 
-
-
   _addClickHandlersToATags:() =>
     links = document.querySelectorAll("a[rel=external]")
     j = 0
