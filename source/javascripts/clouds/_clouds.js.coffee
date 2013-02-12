@@ -113,9 +113,7 @@ class window.AmoebaCD.Clouds
       layer = @layers[j]
       layer.data.a += layer.data.speed
       t = "translateX( " + layer.data.x + "px ) translateY( " + layer.data.y + "px ) translateZ( " + layer.data.z + "px ) rotateY( " + (-@worldYAngle) + "deg ) rotateX( " + (-@worldXAngle) + "deg ) rotateZ( " + layer.data.a + "deg ) scale( " + layer.data.s + ")"
-      layer.style.webkitTransform = t
-      layer.style.MozTransform = t
-      layer.style.oTransform = t
+      $(layer).css(transform: t)
       j++
 
     #layer.style.webkitFilter = 'blur(5px)';
