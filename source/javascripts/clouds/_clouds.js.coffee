@@ -10,6 +10,7 @@ class window.AmoebaCD.Clouds
     @worldYAngle = 0
     @lastTime = 0
     this._setupRAF()
+    this._setupEventListeners()
 
     this._addClickHandlersToATags()
     this.setup()
@@ -101,27 +102,14 @@ class window.AmoebaCD.Clouds
       j++
     return div
 
+  _updateView:() =>
+    t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
+    $(@world).css(transform: t)
+
   setup: () =>
 
     #@worldXAngle = .1 * ( e.clientY - .5 * window.innerHeight );
     #@worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth );
-
-    updateView = =>
-      t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
-      $(@world).css(transform: t)
-
-    orientationhandler = (e) ->
-      if not e.gamma and not e.beta
-        e.gamma = -(e.x * (180 / Math.PI))
-        e.beta = -(e.y * (180 / Math.PI))
-      x = e.gamma
-      y = e.beta
-      @worldXAngle = y
-      @worldYAngle = x
-      updateView()
-
-    #window.addEventListener( 'deviceorientation', orientationhandler, false );
-    #window.addEventListener( 'MozOrientation', orientationhandler, false );
 
     update = =>
       j = 0
@@ -138,10 +126,26 @@ class window.AmoebaCD.Clouds
       #layer.style.webkitFilter = 'blur(5px)';
       window.requestAnimationFrame update
 
+    update()
+
+  _setupEventListeners: () =>
+    orientationhandler = (e) ->
+      if not e.gamma and not e.beta
+        e.gamma = -(e.x * (180 / Math.PI))
+        e.beta = -(e.y * (180 / Math.PI))
+      x = e.gamma
+      y = e.beta
+      @worldXAngle = y
+      @worldYAngle = x
+      this._updateView()
+
+    #window.addEventListener( 'deviceorientation', orientationhandler, false );
+    #window.addEventListener( 'MozOrientation', orientationhandler, false );
+
     onContainerMouseWheel = (event) =>
       event = (if event then event else window.event)
       @translateZ = @translateZ - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
-      updateView()
+      this._updateView()
 
     window.addEventListener "mousewheel", onContainerMouseWheel
     window.addEventListener "DOMMouseScroll", onContainerMouseWheel
@@ -156,7 +160,7 @@ class window.AmoebaCD.Clouds
     window.addEventListener "mousemove", (e) =>
       @worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
       @worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
-      updateView()
+      this._updateView()
 
     window.addEventListener "touchmove", (e) =>
       ptr = e.changedTouches.length
@@ -164,10 +168,9 @@ class window.AmoebaCD.Clouds
         touch = e.changedTouches[ptr]
         @worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
         @worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
-        updateView()
+        this._updateView()
       e.preventDefault()
 
-    update()
 
 
   _addClickHandlersToATags:() =>
