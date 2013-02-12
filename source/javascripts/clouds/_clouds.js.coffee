@@ -108,10 +108,6 @@ class window.AmoebaCD.Clouds
       @world.style.webkitTransform = t
       @world.style.MozTransform = t
       @world.style.oTransform = t
-    onContainerMouseWheel = (event) ->
-      event = (if event then event else window.event)
-      d = d - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
-      updateView()
     orientationhandler = (e) ->
       if not e.gamma and not e.beta
         e.gamma = -(e.x * (180 / Math.PI))
@@ -172,6 +168,11 @@ class window.AmoebaCD.Clouds
     @viewport.style.webkitPerspective = p
     @viewport.style.MozPerspective = p + "px"
     @viewport.style.oPerspective = p
+
+    onContainerMouseWheel = (event) ->
+      event = (if event then event else window.event)
+      d = d - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
+      updateView()
 
     window.addEventListener "mousewheel", onContainerMouseWheel
     window.addEventListener "DOMMouseScroll", onContainerMouseWheel
