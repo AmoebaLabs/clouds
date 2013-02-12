@@ -107,11 +107,6 @@ class window.AmoebaCD.Clouds
     $(@world).css(transform: t)
 
   _update: () =>
-
-    # this was in the code, not sure what it does
-    # @worldXAngle = .1 * ( e.clientY - .5 * window.innerHeight );
-    # @worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth );
-
     j = 0
 
     while j < @layers.length
@@ -137,8 +132,8 @@ class window.AmoebaCD.Clouds
       @worldYAngle = x
       this._updateView()
 
-    #window.addEventListener( 'deviceorientation', orientationhandler, false );
-    #window.addEventListener( 'MozOrientation', orientationhandler, false );
+    # window.addEventListener( 'deviceorientation', orientationhandler, false );
+    # window.addEventListener( 'MozOrientation', orientationhandler, false );
 
     onContainerMouseWheel = (event) =>
       event = (if event then event else window.event)
@@ -156,8 +151,13 @@ class window.AmoebaCD.Clouds
       this.generate()  if e.keyCode is 32
 
     window.addEventListener "mousemove", (e) =>
+      # alternate calculation
+      # @worldXAngle = -(.1 * ( e.clientY - .5 * window.innerHeight ))
+      # @worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth )
+
       @worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
       @worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
+
       this._updateView()
 
     window.addEventListener "touchmove", (e) =>
