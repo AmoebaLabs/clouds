@@ -5,7 +5,12 @@ class window.AmoebaCD.Clouds
     @layers = []
     @objects = []
     @computedWeights = []
+    @translateZ = 0
+    @worldXAngle = 0
+    @worldYAngle = 0
+    @lastTime = 0
 
+    this._addClickHandlersToATags()
     this.setup()
 
   generate: () =>
@@ -100,11 +105,11 @@ class window.AmoebaCD.Clouds
     #window.addEventListener( 'deviceorientation', orientationhandler, false );
     #window.addEventListener( 'MozOrientation', orientationhandler, false );
 
-    #worldXAngle = .1 * ( e.clientY - .5 * window.innerHeight );
-    #worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth );
+    #@worldXAngle = .1 * ( e.clientY - .5 * window.innerHeight );
+    #@worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth );
 
     updateView = =>
-      t = "translateZ( " + d + "px ) rotateX( " + worldXAngle + "deg) rotateY( " + worldYAngle + "deg)"
+      t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
       @world.style.webkitTransform = t
       @world.style.MozTransform = t
       @world.style.oTransform = t
@@ -114,16 +119,17 @@ class window.AmoebaCD.Clouds
         e.beta = -(e.y * (180 / Math.PI))
       x = e.gamma
       y = e.beta
-      worldXAngle = y
-      worldYAngle = x
+      @worldXAngle = y
+      @worldYAngle = x
       updateView()
+
     update = =>
       j = 0
 
       while j < @layers.length
         layer = @layers[j]
         layer.data.a += layer.data.speed
-        t = "translateX( " + layer.data.x + "px ) translateY( " + layer.data.y + "px ) translateZ( " + layer.data.z + "px ) rotateY( " + (-worldYAngle) + "deg ) rotateX( " + (-worldXAngle) + "deg ) rotateZ( " + layer.data.a + "deg ) scale( " + layer.data.s + ")"
+        t = "translateX( " + layer.data.x + "px ) translateY( " + layer.data.y + "px ) translateZ( " + layer.data.z + "px ) rotateY( " + (-@worldYAngle) + "deg ) rotateX( " + (-@worldXAngle) + "deg ) rotateZ( " + layer.data.a + "deg ) scale( " + layer.data.s + ")"
         layer.style.webkitTransform = t
         layer.style.MozTransform = t
         layer.style.oTransform = t
@@ -131,7 +137,7 @@ class window.AmoebaCD.Clouds
 
       #layer.style.webkitFilter = 'blur(5px)';
       requestAnimationFrame update
-    lastTime = 0
+
     vendors = ["ms", "moz", "webkit", "o"]
     x = 0
 
@@ -139,22 +145,54 @@ class window.AmoebaCD.Clouds
       window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"]
       window.cancelRequestAnimationFrame = window[vendors[x] + "CancelRequestAnimationFrame"]
       ++x
+
     unless window.requestAnimationFrame
       window.requestAnimationFrame = (callback, element) ->
         currTime = new Date().getTime()
-        timeToCall = Math.max(0, 16 - (currTime - lastTime))
+        timeToCall = Math.max(0, 16 - (currTime - @lastTime))
         id = window.setTimeout(->
           callback currTime + timeToCall
         , timeToCall)
-        lastTime = currTime + timeToCall
+        @lastTime = currTime + timeToCall
         id
+
     unless window.cancelAnimationFrame
       window.cancelAnimationFrame = (id) ->
         clearTimeout id
-    d = 0
-    p = 400
-    worldXAngle = 0
-    worldYAngle = 0
+
+    onContainerMouseWheel = (event) =>
+      event = (if event then event else window.event)
+      @translateZ = @translateZ - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
+      updateView()
+
+    window.addEventListener "mousewheel", onContainerMouseWheel
+    window.addEventListener "DOMMouseScroll", onContainerMouseWheel
+
+    document.getElementById("generateBtn").addEventListener "click", (e) =>
+      this.generate()
+      e.preventDefault()
+
+    window.addEventListener "keydown", (e) =>
+      this.generate()  if e.keyCode is 32
+
+    window.addEventListener "mousemove", (e) =>
+      @worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
+      @worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
+      updateView()
+
+    window.addEventListener "touchmove", (e) =>
+      ptr = e.changedTouches.length
+      while ptr--
+        touch = e.changedTouches[ptr]
+        @worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
+        @worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
+        updateView()
+      e.preventDefault()
+
+    update()
+
+
+  _addClickHandlersToATags:() =>
     links = document.querySelectorAll("a[rel=external]")
     j = 0
 
@@ -165,36 +203,3 @@ class window.AmoebaCD.Clouds
         e.preventDefault()
       ), false
       j++
-    @viewport.style.webkitPerspective = p
-    @viewport.style.MozPerspective = p + "px"
-    @viewport.style.oPerspective = p
-
-    onContainerMouseWheel = (event) ->
-      event = (if event then event else window.event)
-      d = d - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
-      updateView()
-
-    window.addEventListener "mousewheel", onContainerMouseWheel
-    window.addEventListener "DOMMouseScroll", onContainerMouseWheel
-    document.getElementById("generateBtn").addEventListener "click", (e) =>
-      this.generate()
-      e.preventDefault()
-
-    window.addEventListener "keydown", (e) =>
-      this.generate()  if e.keyCode is 32
-
-    window.addEventListener "mousemove", (e) ->
-      worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
-      worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
-      updateView()
-
-    window.addEventListener "touchmove", (e) ->
-      ptr = e.changedTouches.length
-      while ptr--
-        touch = e.changedTouches[ptr]
-        worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
-        worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
-        updateView()
-      e.preventDefault()
-
-    update()
