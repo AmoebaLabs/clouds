@@ -13,7 +13,7 @@ class window.AmoebaCD.Clouds
     this._setupEventListeners()
 
     this._addClickHandlersToATags()
-    this.setup()
+    this._update()
 
   generate: () =>
     @objects = []
@@ -106,27 +106,25 @@ class window.AmoebaCD.Clouds
     t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
     $(@world).css(transform: t)
 
-  setup: () =>
+  _update: () =>
 
-    #@worldXAngle = .1 * ( e.clientY - .5 * window.innerHeight );
-    #@worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth );
+    # this was in the code, not sure what it does
+    # @worldXAngle = .1 * ( e.clientY - .5 * window.innerHeight );
+    # @worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth );
 
-    update = =>
-      j = 0
+    j = 0
 
-      while j < @layers.length
-        layer = @layers[j]
-        layer.data.a += layer.data.speed
-        t = "translateX( " + layer.data.x + "px ) translateY( " + layer.data.y + "px ) translateZ( " + layer.data.z + "px ) rotateY( " + (-@worldYAngle) + "deg ) rotateX( " + (-@worldXAngle) + "deg ) rotateZ( " + layer.data.a + "deg ) scale( " + layer.data.s + ")"
-        layer.style.webkitTransform = t
-        layer.style.MozTransform = t
-        layer.style.oTransform = t
-        j++
+    while j < @layers.length
+      layer = @layers[j]
+      layer.data.a += layer.data.speed
+      t = "translateX( " + layer.data.x + "px ) translateY( " + layer.data.y + "px ) translateZ( " + layer.data.z + "px ) rotateY( " + (-@worldYAngle) + "deg ) rotateX( " + (-@worldXAngle) + "deg ) rotateZ( " + layer.data.a + "deg ) scale( " + layer.data.s + ")"
+      layer.style.webkitTransform = t
+      layer.style.MozTransform = t
+      layer.style.oTransform = t
+      j++
 
-      #layer.style.webkitFilter = 'blur(5px)';
-      window.requestAnimationFrame update
-
-    update()
+    #layer.style.webkitFilter = 'blur(5px)';
+    window.requestAnimationFrame this._update
 
   _setupEventListeners: () =>
     orientationhandler = (e) ->
