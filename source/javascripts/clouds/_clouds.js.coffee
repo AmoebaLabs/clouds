@@ -9,6 +9,7 @@ class window.AmoebaCD.Clouds
     @worldXAngle = 0
     @worldYAngle = 0
     @lastTime = 0
+    this._setupRAF()
 
     this._addClickHandlersToATags()
     this.setup()
@@ -51,9 +52,8 @@ class window.AmoebaCD.Clouds
     y = 256 - (Math.random() * 512)
     z = 256 - (Math.random() * 512)
     t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px )"
-    div.style.webkitTransform = t
-    div.style.MozTransform = t
-    div.style.oTransform = t
+    $(div).css(transform: t)
+
     @world.appendChild div
     j = 0
 
@@ -73,8 +73,10 @@ class window.AmoebaCD.Clouds
           ) cloud
           src = @computedWeights[k].src
         k++
+
       cloud.setAttribute "src", src
       cloud.className = "cloudLayer"
+
       x = 256 - (Math.random() * 512)
       y = 256 - (Math.random() * 512)
       z = 100 - (Math.random() * 200)
@@ -91,28 +93,23 @@ class window.AmoebaCD.Clouds
         speed: .1 * Math.random()
 
       t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px ) rotateZ( " + a + "deg ) scale( " + s + " )"
-      cloud.style.webkitTransform = t
-      cloud.style.MozTransform = t
-      cloud.style.oTransform = t
+      $(cloud).css(transform: t)
+
       div.appendChild cloud
       @layers.push cloud
+
       j++
     div
 
-
-
   setup: () =>
-    #window.addEventListener( 'deviceorientation', orientationhandler, false );
-    #window.addEventListener( 'MozOrientation', orientationhandler, false );
 
     #@worldXAngle = .1 * ( e.clientY - .5 * window.innerHeight );
     #@worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth );
 
     updateView = =>
       t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
-      @world.style.webkitTransform = t
-      @world.style.MozTransform = t
-      @world.style.oTransform = t
+      $(@world).css(transform: t)
+
     orientationhandler = (e) ->
       if not e.gamma and not e.beta
         e.gamma = -(e.x * (180 / Math.PI))
@@ -122,6 +119,9 @@ class window.AmoebaCD.Clouds
       @worldXAngle = y
       @worldYAngle = x
       updateView()
+
+    #window.addEventListener( 'deviceorientation', orientationhandler, false );
+    #window.addEventListener( 'MozOrientation', orientationhandler, false );
 
     update = =>
       j = 0
@@ -136,29 +136,7 @@ class window.AmoebaCD.Clouds
         j++
 
       #layer.style.webkitFilter = 'blur(5px)';
-      requestAnimationFrame update
-
-    vendors = ["ms", "moz", "webkit", "o"]
-    x = 0
-
-    while x < vendors.length and not window.requestAnimationFrame
-      window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"]
-      window.cancelRequestAnimationFrame = window[vendors[x] + "CancelRequestAnimationFrame"]
-      ++x
-
-    unless window.requestAnimationFrame
-      window.requestAnimationFrame = (callback, element) ->
-        currTime = new Date().getTime()
-        timeToCall = Math.max(0, 16 - (currTime - @lastTime))
-        id = window.setTimeout(->
-          callback currTime + timeToCall
-        , timeToCall)
-        @lastTime = currTime + timeToCall
-        id
-
-    unless window.cancelAnimationFrame
-      window.cancelAnimationFrame = (id) ->
-        clearTimeout id
+      window.requestAnimationFrame update
 
     onContainerMouseWheel = (event) =>
       event = (if event then event else window.event)
@@ -203,3 +181,26 @@ class window.AmoebaCD.Clouds
         e.preventDefault()
       ), false
       j++
+
+  _setupRAF: () =>
+    vendors = ["ms", "moz", "webkit", "o"]
+    x = 0
+
+    while x < vendors.length and not window.requestAnimationFrame
+      window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"]
+      window.cancelRequestAnimationFrame = window[vendors[x] + "CancelRequestAnimationFrame"]
+      ++x
+
+    unless window.requestAnimationFrame
+      window.requestAnimationFrame = (callback, element) ->
+        currTime = new Date().getTime()
+        timeToCall = Math.max(0, 16 - (currTime - @lastTime))
+        id = window.setTimeout(->
+          callback currTime + timeToCall
+        , timeToCall)
+        @lastTime = currTime + timeToCall
+        id
+
+    unless window.cancelAnimationFrame
+      window.cancelAnimationFrame = (id) ->
+        clearTimeout id
