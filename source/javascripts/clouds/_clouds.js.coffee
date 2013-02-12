@@ -2,6 +2,8 @@ class window.AmoebaCD.Clouds
   constructor:() ->
     @world = document.getElementById("world")
     @viewport = document.getElementById("viewport")
+    @textures = this._buildTextures()
+
     @layers = []
     @objects = []
     @computedWeights = []
@@ -22,19 +24,17 @@ class window.AmoebaCD.Clouds
     total = 0
     j = 0
 
-    textures = AmoebaCD.data.textures
-
-    while j < textures.length
-      total += textures[j].weight  if textures[j].weight > 0
+    while j < @textures.length
+      total += @textures[j].weight  if @textures[j].weight > 0
       j++
     accum = 0
     j = 0
 
-    while j < textures.length
-      if textures[j].weight > 0
-        w = textures[j].weight / total
+    while j < @textures.length
+      if @textures[j].weight > 0
+        w = @textures[j].weight / total
         @computedWeights.push
-          src: textures[j].file
+          src: @textures[j].file
           min: accum
           max: accum + w
 
@@ -205,3 +205,38 @@ class window.AmoebaCD.Clouds
     unless window.cancelAnimationFrame
       window.cancelAnimationFrame = (id) ->
         clearTimeout id
+
+  _buildTextures: () =>
+    result = [
+      name: "white cloud"
+      file: "/images/cloud.png"
+      opacity: 1
+      weight: 0
+    ,
+      name: "dark cloud"
+      file: "/images/darkCloud.png"
+      opacity: 1
+      weight: 0
+    ,
+      name: "smoke cloud"
+      file: "/images/smoke.png"
+      opacity: 1
+      weight: 0
+    ,
+      name: "explosion"
+      file: "/images/explosion.png"
+      opacity: 1
+      weight: 0
+    ,
+      name: "explosion 2"
+      file: "/images/explosion2.png"
+      opacity: 1
+      weight: 0
+    ,
+      name: "box"
+      file: "/images/box.png"
+      opacity: 1
+      weight: 0
+    ]
+
+    return result

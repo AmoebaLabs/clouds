@@ -8,8 +8,7 @@ window.AmoebaCD ?=
   Clouds: {}
 
 jQuery ($) ->
-  AmoebaCD.data = new window.AmoebaCD.CloudTextures()
   AmoebaCD.clouds = new window.AmoebaCD.Clouds()
-  AmoebaCD.options = new window.AmoebaCD.CloudOptions()
+  AmoebaCD.options = new window.AmoebaCD.CloudOptions(AmoebaCD.clouds.textures)
 
 

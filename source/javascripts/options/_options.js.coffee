@@ -1,12 +1,10 @@
 
 class window.AmoebaCD.CloudOptions
-  constructor:() ->
+  constructor:(@textures) ->
     this.setup()
 
   setup: () =>
-    textures = AmoebaCD.data.textures
-
-    setTextureUsage = (id, mode) ->
+    setTextureUsage = (id, mode) =>
       modes = ["None", "Few", "Normal", "Lot"]
       weights =
         None: 0
@@ -21,15 +19,15 @@ class window.AmoebaCD.CloudOptions
         el.className = el.className.replace(" active", "")
         if modes[j] is mode
           el.className += " active"
-          textures[id].weight = weights[mode]
+          @textures[id].weight = weights[mode]
         j++
     el = document.getElementById("textureList")
     j = 0
 
-    while j < textures.length
+    while j < @textures.length
       li = document.createElement("li")
       span = document.createElement("span")
-      span.textContent = textures[j].name
+      span.textContent = @textures[j].name
       div = document.createElement("div")
       div.className = "buttons"
       btnNone = document.createElement("a")
