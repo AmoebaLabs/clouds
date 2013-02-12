@@ -1,7 +1,7 @@
 class window.AmoebaCD.Clouds
   constructor:() ->
-    @world = document.getElementById("world")
-    @viewport = document.getElementById("viewport")
+    @world = $("#world").get(0)
+    @viewport = $("#viewport").get(0)
     @textures = this._buildTextures()
 
     @layers = []
