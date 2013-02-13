@@ -20,6 +20,9 @@ class window.AmoebaCD.CloudOptions
     this._setupOtherButtons()
     this._setupFullScreenButton()
 
+    # show the options div
+    $("#options").css(display: "block");
+
   _setTextureUsage: (id, mode) =>
     _.each(@modes, (modeSpec, index) =>
       el = $("#btn" + modeSpec.name + id)
