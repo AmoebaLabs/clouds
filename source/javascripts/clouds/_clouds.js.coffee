@@ -1,16 +1,12 @@
 class window.AmoebaCD.Clouds
-  constructor:(@fps) ->
-    @world = $("#world").get(0)
+  constructor:(@world, @fps) ->
     @textures = this._buildTextures()
 
     @clouds = []
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
-    @lastTime = 0
     @numClusters = 5
-    this._setupRAF()
-    this._setupEventListeners()
 
     this._animate()  # starts the requestAnimationFrame loop
 
@@ -42,7 +38,11 @@ class window.AmoebaCD.Clouds
     for i in [0...@numClusters]
       @clouds.push(new window.AmoebaCD.Cloud(@world, computedWeights, @fps))
 
-  _updateWorld:() =>
+  updateWorld:(worldXAngle, worldYAngle, translateZ) =>
+    @worldXAngle = worldXAngle
+    @worldYAngle = worldYAngle
+    @translateZ = translateZ
+
     t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
     $(@world).css(transform: t)
 
@@ -65,74 +65,6 @@ class window.AmoebaCD.Clouds
       setTimeout(() =>
         this._animateLayer()
       ,1000 / @fps)
-
-  _setupEventListeners: () =>
-    orientationhandler = (e) ->
-      if not e.gamma and not e.beta
-        e.gamma = -(e.x * (180 / Math.PI))
-        e.beta = -(e.y * (180 / Math.PI))
-      x = e.gamma
-      y = e.beta
-      @worldXAngle = y
-      @worldYAngle = x
-      this._updateWorld()
-
-    # window.addEventListener( 'deviceorientation', orientationhandler, false );
-    # window.addEventListener( 'MozOrientation', orientationhandler, false );
-
-    onContainerMouseWheel = (event) =>
-      event = (if event then event else window.event)
-      @translateZ = @translateZ - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
-      this._updateWorld()
-
-    window.addEventListener "mousewheel", onContainerMouseWheel
-    window.addEventListener "DOMMouseScroll", onContainerMouseWheel
-
-    window.addEventListener "mousemove", (e) =>
-      # alternate calculation
-      # @worldXAngle = -(.1 * ( e.clientY - .5 * window.innerHeight ))
-      # @worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth )
-
-      @worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
-      @worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
-
-      this._updateWorld()
-
-    window.addEventListener "touchmove", (e) =>
-      _.each(e.changedTouches, (touch, index) =>
-        @worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
-        @worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
-        this._updateWorld()
-      )
-
-      e.preventDefault()
-
-  _setupRAF: () =>
-    vendors = ["ms", "moz", "webkit", "o"]
-    x = 0
-
-    unless window.requestAnimationFrame
-      _.each(vendors, (prefix, index) =>
-        window.requestAnimationFrame = window[prefix + "RequestAnimationFrame"]
-        window.cancelRequestAnimationFrame = window[prefix + "CancelRequestAnimationFrame"]
-
-        # return breaks out of _.each
-        return if window.requestAnimationFrame
-      )
-
-    unless window.requestAnimationFrame
-      window.requestAnimationFrame = (callback, element) ->
-        currTime = new Date().getTime()
-        timeToCall = Math.max(0, 16 - (currTime - @lastTime))
-        id = window.setTimeout(->
-          callback currTime + timeToCall
-        , timeToCall)
-        @lastTime = currTime + timeToCall
-        id
-
-    unless window.cancelAnimationFrame
-      window.cancelAnimationFrame = (id) ->
-        clearTimeout id
 
   _buildTextures: () =>
     result = [

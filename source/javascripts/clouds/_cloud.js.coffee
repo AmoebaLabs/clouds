@@ -38,8 +38,8 @@ class window.AmoebaCD.Cloud
       z = 100 - (Math.random() * 200)
       a = Math.random() * 360
       s = .25 + Math.random()
-#      x *= .2
-#      y *= .2
+      x *= .2
+      y *= .2
 
       data =
         x: x
