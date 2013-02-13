@@ -18,10 +18,12 @@ class window.AmoebaCD.CloudsController
         when 32
           AmoebaCD.clouds.generate()
         when 67  # 'c' key
-          if $("#options").css('display') is 'none'
-            $("#options").css(display: "block");
-          else
-            $("#options").css(display: "none");
+          # only toggle if AmoebaCD.options exists
+          if AmoebaCD.options?
+            if $("#options").css('display') is 'none'
+              $("#options").css(display: "block");
+            else
+              $("#options").css(display: "none");
         else
           console.log(e.keyCode)
 

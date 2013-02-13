@@ -4,12 +4,12 @@ class window.AmoebaCD.Clouds
     @viewport = $("#viewport").get(0)
     @textures = this._buildTextures()
 
-    @layers = []
-    @objects = []
+    @clouds = []
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
     @lastTime = 0
+    @numClusters = 5
     @fps = 24    # cpu is high at >= 60
     this._setupRAF()
     this._setupEventListeners()
@@ -40,63 +40,14 @@ class window.AmoebaCD.Clouds
         accum += w
     )
 
-    @objects = []
-    for i in [0..4]
-      @objects.push this._createCloud(computedWeights)
+    @clouds = []
+    for i in [0...@numClusters]
+      @clouds.push(this._createCloud(computedWeights))
 
   _createCloud: (computedWeights) =>
-    div = document.createElement("div")
-    div.className = "cloudBase"
-    x = 256 - (Math.random() * 512)
-    y = 256 - (Math.random() * 512)
-    z = 256 - (Math.random() * 512)
-    t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px )"
-    $(div).css(transform: t)
+    result = new window.AmoebaCD.Cloud(@world, computedWeights)
 
-    @world.appendChild div
-
-    cnt = 5 + Math.round(Math.random() * 10)
-    for j in [0...cnt]
-      cloud = document.createElement("img")
-      cloud.style.opacity = 0
-      r = Math.random()
-      src = "troll.png"     # SNG need this image, or fix code
-
-      _.each(computedWeights, (weight, index) =>
-        if r >= weight.min and r <= weight.max
-          ((img) ->
-            img.addEventListener "load", ->
-              img.style.opacity = .8
-
-          ) cloud
-          src = weight.src
-      )
-
-      cloud.setAttribute "src", src
-      cloud.className = "cloudLayer"
-
-      x = 256 - (Math.random() * 512)
-      y = 256 - (Math.random() * 512)
-      z = 100 - (Math.random() * 200)
-      a = Math.random() * 360
-      s = .25 + Math.random()
-      x *= .2
-      y *= .2
-      cloud.data =
-        x: x
-        y: y
-        z: z
-        a: a
-        s: s
-        speed: ((60/Math.min(@fps, 60)) * .1) * Math.random()
-
-      t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px ) rotateZ( " + a + "deg ) scale( " + s + " )"
-      $(cloud).css(transform: t)
-
-      div.appendChild cloud
-      @layers.push cloud
-
-    return div
+    return result
 
   _updateWorld:() =>
     t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
@@ -106,13 +57,11 @@ class window.AmoebaCD.Clouds
     # call this first
     requestAnimationFrame(this._animate);
 
-    _.each(@layers, (layer, index) =>
+    _.each(@clouds, (cloud, index) =>
       # could add this later
-      # layer.style.webkitFilter = 'blur(5px)';
+      # cloud.style.webkitFilter = 'blur(5px)';
 
-      layer.data.a += layer.data.speed
-      t = "translateX( " + layer.data.x + "px ) translateY( " + layer.data.y + "px ) translateZ( " + layer.data.z + "px ) rotateY( " + (-@worldYAngle) + "deg ) rotateX( " + (-@worldXAngle) + "deg ) rotateZ( " + layer.data.a + "deg ) scale( " + layer.data.s + ")"
-      $(layer).css(transform: t)
+      cloud.transformLayers(@worldXAngle, @worldYAngle)
     )
 
   # called by requestAnimationFrame to set the next state of animation
