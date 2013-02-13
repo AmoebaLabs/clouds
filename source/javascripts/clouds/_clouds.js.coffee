@@ -1,7 +1,6 @@
 class window.AmoebaCD.Clouds
   constructor:(@fps) ->
     @world = $("#world").get(0)
-    @viewport = $("#viewport").get(0)
     @textures = this._buildTextures()
 
     @clouds = []
