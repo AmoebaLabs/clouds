@@ -1,29 +1,34 @@
 
 class window.AmoebaCD.CloudOptions
   constructor:(@textures) ->
-    this._setup()
+    @modes = [
+      name: 'None'
+      weight: 0
+    ,
+      name: 'Few'
+      weight: .3
+    ,
+      name: 'Normal'
+      weight: .7
+    ,
+      name: 'Lot'
+      weight: 1
+    ]
 
-  _setup: () =>
     this._setupButtons()
     this._setupPresets()
     this._setupOtherButtons()
     this._setupFullScreenButton()
 
-  _setTextureUsage: (id, inMode) =>
-    modes = ["None", "Few", "Normal", "Lot"]
-    weights =
-      None: 0
-      Few: .3
-      Normal: .7
-      Lot: 1
+  _setTextureUsage: (id, mode) =>
+    _.each(@modes, (modeSpec, index) =>
+      el = $("#btn" + modeSpec.name + id)
 
-    _.each(modes, (mode, index) =>
-      el = document.getElementById("btn" + mode + id)
-      el.className = el.className.replace(" active", "")
-
-      if mode is inMode
-        el.className += " active"
-        @textures[id].weight = weights[inMode]
+      if modeSpec.name is mode
+        el.addClass("active")
+        @textures[id].weight = modeSpec.weight
+      else
+        el.removeClass("active")
     )
 
   _setupPresets: () =>
