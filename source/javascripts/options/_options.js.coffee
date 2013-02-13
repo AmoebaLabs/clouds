@@ -1,9 +1,74 @@
 
 class window.AmoebaCD.CloudOptions
   constructor:(@textures) ->
-    this.setup()
+    this._setup()
 
-  setup: () =>
+  _setup: () =>
+    this._setupButtons()
+    this._setupPresets()
+    this._setupOtherButtons()
+    this._setupFullScreenButton()
+
+  _setTextureUsage: (id, inMode) =>
+    modes = ["None", "Few", "Normal", "Lot"]
+    weights =
+      None: 0
+      Few: .3
+      Normal: .7
+      Lot: 1
+
+    _.each(modes, (mode, index) =>
+      el = document.getElementById("btn" + mode + id)
+      el.className = el.className.replace(" active", "")
+
+      if mode is inMode
+        el.className += " active"
+        @textures[id].weight = weights[inMode]
+    )
+
+  _setupPresets: () =>
+    document.getElementById("cloudsPreset").addEventListener "click", (e) =>
+      this._setTextureUsage 0, "Lot"
+      this._setTextureUsage 1, "None"
+      this._setTextureUsage 2, "None"
+      this._setTextureUsage 3, "None"
+      this._setTextureUsage 4, "None"
+      this._setTextureUsage 5, "None"
+      AmoebaCD.clouds.generate()
+      e.preventDefault()
+
+    document.getElementById("stormPreset").addEventListener "click", (e) =>
+      this._setTextureUsage 0, "None"
+      this._setTextureUsage 1, "None"
+      this._setTextureUsage 2, "Lot"
+      this._setTextureUsage 3, "None"
+      this._setTextureUsage 4, "None"
+      this._setTextureUsage 5, "None"
+      AmoebaCD.clouds.generate()
+      e.preventDefault()
+
+    document.getElementById("boomPreset").addEventListener "click", (e) =>
+      this._setTextureUsage 0, "None"
+      this._setTextureUsage 1, "None"
+      this._setTextureUsage 2, "Lot"
+      this._setTextureUsage 3, "Few"
+      this._setTextureUsage 4, "None"
+      this._setTextureUsage 5, "None"
+      AmoebaCD.clouds.generate()
+      e.preventDefault()
+
+    document.getElementById("bayPreset").addEventListener "click", (e) =>
+      this._setTextureUsage 0, "None"
+      this._setTextureUsage 1, "None"
+      this._setTextureUsage 2, "Normal"
+      this._setTextureUsage 3, "Lot"
+      this._setTextureUsage 4, "Lot"
+      this._setTextureUsage 5, "None"
+      AmoebaCD.clouds.generate()
+      e.preventDefault()
+
+
+  _setupButtons: () =>
     el = document.getElementById("textureList")
 
     _.each(@textures, (texture, index) =>
@@ -66,8 +131,34 @@ class window.AmoebaCD.CloudOptions
     this._setTextureUsage 0, "Lot"
     AmoebaCD.clouds.generate()
 
-    this._setupPresets()
+  _setupFullScreenButton: () =>
+    el = document.getElementById("fullscreenBtn")
+    if el
+      options = document.getElementById("options")
+      el.addEventListener "click", ((e) =>
+        if document.body.webkitRequestFullScreen
+          document.body.onwebkitfullscreenchange = (e) =>
 
+            #    options.style.display = 'none';
+            document.body.style.width = window.innerWidth + "px"
+            document.body.style.height = window.innerHeight + "px"
+            document.body.onwebkitfullscreenchange = =>
+
+
+              #		options.style.display = 'block';
+          document.body.webkitRequestFullScreen()
+
+        #document.body.onmozfullscreenchange = function( e ) {
+        #                 options.style.display = 'none';
+        #                 document.body.onmozfullscreenchange = function( e ) {
+        #                 options.style.display = 'block';
+        #                 };
+        #                 };
+        document.body.mozRequestFullScreen()  if document.body.mozRequestFullScreen
+        e.preventDefault()
+      ), false
+
+  _setupOtherButtons: () =>
     optionsContent = document.getElementById("optionsContent")
     el = document.getElementById("closeBtn").addEventListener("click", (e) =>
       unless optionsContent.style.display is "block"
@@ -85,87 +176,3 @@ class window.AmoebaCD.CloudOptions
         textureControls.style.display = "none"
       e.preventDefault()
     )
-
-    el = document.getElementById("fullscreenBtn")
-    if el
-      options = document.getElementById("options")
-      el.addEventListener "click", ((e) =>
-        if document.body.webkitRequestFullScreen
-          document.body.onwebkitfullscreenchange = (e) =>
-
-            #    options.style.display = 'none';
-            document.body.style.width = window.innerWidth + "px"
-            document.body.style.height = window.innerHeight + "px"
-            document.body.onwebkitfullscreenchange = =>
-
-
-          #		options.style.display = 'block';
-          document.body.webkitRequestFullScreen()
-
-        #document.body.onmozfullscreenchange = function( e ) {
-        #                 options.style.display = 'none';
-        #                 document.body.onmozfullscreenchange = function( e ) {
-        #                 options.style.display = 'block';
-        #                 };
-        #                 };
-        document.body.mozRequestFullScreen()  if document.body.mozRequestFullScreen
-        e.preventDefault()
-      ), false
-
-  _setTextureUsage: (id, inMode) =>
-    modes = ["None", "Few", "Normal", "Lot"]
-    weights =
-      None: 0
-      Few: .3
-      Normal: .7
-      Lot: 1
-
-    _.each(modes, (mode, index) =>
-      el = document.getElementById("btn" + mode + id)
-      el.className = el.className.replace(" active", "")
-
-      if mode is inMode
-        el.className += " active"
-        @textures[id].weight = weights[inMode]
-    )
-
-  _setupPresets: () =>
-    document.getElementById("cloudsPreset").addEventListener "click", (e) =>
-      this._setTextureUsage 0, "Lot"
-      this._setTextureUsage 1, "None"
-      this._setTextureUsage 2, "None"
-      this._setTextureUsage 3, "None"
-      this._setTextureUsage 4, "None"
-      this._setTextureUsage 5, "None"
-      AmoebaCD.clouds.generate()
-      e.preventDefault()
-
-    document.getElementById("stormPreset").addEventListener "click", (e) =>
-      this._setTextureUsage 0, "None"
-      this._setTextureUsage 1, "None"
-      this._setTextureUsage 2, "Lot"
-      this._setTextureUsage 3, "None"
-      this._setTextureUsage 4, "None"
-      this._setTextureUsage 5, "None"
-      AmoebaCD.clouds.generate()
-      e.preventDefault()
-
-    document.getElementById("boomPreset").addEventListener "click", (e) =>
-      this._setTextureUsage 0, "None"
-      this._setTextureUsage 1, "None"
-      this._setTextureUsage 2, "Lot"
-      this._setTextureUsage 3, "Few"
-      this._setTextureUsage 4, "None"
-      this._setTextureUsage 5, "None"
-      AmoebaCD.clouds.generate()
-      e.preventDefault()
-
-    document.getElementById("bayPreset").addEventListener "click", (e) =>
-      this._setTextureUsage 0, "None"
-      this._setTextureUsage 1, "None"
-      this._setTextureUsage 2, "Normal"
-      this._setTextureUsage 3, "Lot"
-      this._setTextureUsage 4, "Lot"
-      this._setTextureUsage 5, "None"
-      AmoebaCD.clouds.generate()
-      e.preventDefault()
