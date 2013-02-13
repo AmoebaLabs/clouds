@@ -42,9 +42,9 @@ class window.AmoebaCD.Clouds
 
     @objects = []
     for i in [0..4]
-      @objects.push this.createCloud(computedWeights)
+      @objects.push this._createCloud(computedWeights)
 
-  createCloud: (computedWeights) =>
+  _createCloud: (computedWeights) =>
     div = document.createElement("div")
     div.className = "cloudBase"
     x = 256 - (Math.random() * 512)
