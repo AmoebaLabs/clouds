@@ -18,6 +18,8 @@ jQuery ($) ->
   else
     AmoebaCD.clouds.generate()
 
+  this._addClickHandlersToATags()
+
   # add some event listeners
   window.addEventListener "keydown", (e) =>
     switch (e.keyCode)
@@ -30,3 +32,17 @@ jQuery ($) ->
           $("#options").css(display: "none");
       else
         console.log(e.keyCode)
+
+  _addClickHandlersToATags:() =>
+    links = document.querySelectorAll("a[rel=external]")
+
+    _.each(links, (a, index) =>
+      a.addEventListener("click", (e) ->
+        window.open @href, "_blank"
+        e.preventDefault()
+      )
+    )
+
+
+
+

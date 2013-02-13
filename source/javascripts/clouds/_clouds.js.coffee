@@ -14,7 +14,6 @@ class window.AmoebaCD.Clouds
     this._setupRAF()
     this._setupEventListeners()
 
-    this._addClickHandlersToATags()
     this._animate()  # starts the requestAnimationFrame loop
 
   generate: () =>
@@ -163,16 +162,6 @@ class window.AmoebaCD.Clouds
       )
 
       e.preventDefault()
-
-  _addClickHandlersToATags:() =>
-    links = document.querySelectorAll("a[rel=external]")
-
-    _.each(links, (a, index) =>
-      a.addEventListener("click", (e) ->
-        window.open @href, "_blank"
-        e.preventDefault()
-      )
-    )
 
   _setupRAF: () =>
     vendors = ["ms", "moz", "webkit", "o"]
