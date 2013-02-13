@@ -11,11 +11,12 @@ class window.AmoebaCD.Clouds
     @worldXAngle = 0
     @worldYAngle = 0
     @lastTime = 0
+    @fps = 24    # cpu is high at >= 60
     this._setupRAF()
     this._setupEventListeners()
 
     this._addClickHandlersToATags()
-    this._update()
+    this._animate()  # starts the requestAnimationFrame loop
 
   generate: () =>
     @objects = []
@@ -91,7 +92,7 @@ class window.AmoebaCD.Clouds
         z: z
         a: a
         s: s
-        speed: .1 * Math.random()
+        speed: ((60/@fps) * .1) * Math.random()
 
       t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px ) rotateZ( " + a + "deg ) scale( " + s + " )"
       $(cloud).css(transform: t)
@@ -102,22 +103,34 @@ class window.AmoebaCD.Clouds
       j++
     return div
 
-  _updateView:() =>
+  _updateWorld:() =>
     t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
     $(@world).css(transform: t)
 
-  _update: () =>
-    j = 0
+  _animateLayer: () =>
+    # call this first
+    requestAnimationFrame(this._animate);
 
+    j = 0
     while j < @layers.length
       layer = @layers[j]
+
+      # could add this later
+      # layer.style.webkitFilter = 'blur(5px)';
+
       layer.data.a += layer.data.speed
       t = "translateX( " + layer.data.x + "px ) translateY( " + layer.data.y + "px ) translateZ( " + layer.data.z + "px ) rotateY( " + (-@worldYAngle) + "deg ) rotateX( " + (-@worldXAngle) + "deg ) rotateZ( " + layer.data.a + "deg ) scale( " + layer.data.s + ")"
       $(layer).css(transform: t)
       j++
 
-    #layer.style.webkitFilter = 'blur(5px)';
-    window.requestAnimationFrame this._update
+  # called by requestAnimationFrame to set the next state of animation
+  _animate: () =>
+    if @fps >= 60
+      this._animateLayer()
+    else
+      setTimeout(() =>
+        this._animateLayer()
+      ,1000 / @fps)
 
   _setupEventListeners: () =>
     orientationhandler = (e) ->
@@ -128,7 +141,7 @@ class window.AmoebaCD.Clouds
       y = e.beta
       @worldXAngle = y
       @worldYAngle = x
-      this._updateView()
+      this._updateWorld()
 
     # window.addEventListener( 'deviceorientation', orientationhandler, false );
     # window.addEventListener( 'MozOrientation', orientationhandler, false );
@@ -136,7 +149,7 @@ class window.AmoebaCD.Clouds
     onContainerMouseWheel = (event) =>
       event = (if event then event else window.event)
       @translateZ = @translateZ - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
-      this._updateView()
+      this._updateWorld()
 
     window.addEventListener "mousewheel", onContainerMouseWheel
     window.addEventListener "DOMMouseScroll", onContainerMouseWheel
@@ -156,7 +169,7 @@ class window.AmoebaCD.Clouds
       @worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
       @worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
 
-      this._updateView()
+      this._updateWorld()
 
     window.addEventListener "touchmove", (e) =>
       ptr = e.changedTouches.length
@@ -164,7 +177,7 @@ class window.AmoebaCD.Clouds
         touch = e.changedTouches[ptr]
         @worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
         @worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
-        this._updateView()
+        this._updateWorld()
       e.preventDefault()
 
   _addClickHandlersToATags:() =>
