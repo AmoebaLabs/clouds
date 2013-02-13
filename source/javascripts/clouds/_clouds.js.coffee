@@ -40,10 +40,8 @@ class window.AmoebaCD.Clouds
         accum += w
     )
 
-    j = 0
-    while j < 5
+    for j in [0..4]
       @objects.push this.createCloud(computedWeights)
-      j++
 
   createCloud: (computedWeights) =>
     div = document.createElement("div")
@@ -55,9 +53,9 @@ class window.AmoebaCD.Clouds
     $(div).css(transform: t)
 
     @world.appendChild div
-    j = 0
 
-    while j < 5 + Math.round(Math.random() * 10)
+    cnt = 5 + Math.round(Math.random() * 10)
+    for j in [0...cnt]
       cloud = document.createElement("img")
       cloud.style.opacity = 0
       r = Math.random()
@@ -97,7 +95,6 @@ class window.AmoebaCD.Clouds
       div.appendChild cloud
       @layers.push cloud
 
-      j++
     return div
 
   _updateWorld:() =>
@@ -188,10 +185,14 @@ class window.AmoebaCD.Clouds
     vendors = ["ms", "moz", "webkit", "o"]
     x = 0
 
-    while x < vendors.length and not window.requestAnimationFrame
-      window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"]
-      window.cancelRequestAnimationFrame = window[vendors[x] + "CancelRequestAnimationFrame"]
-      ++x
+    unless window.requestAnimationFrame
+      _.each(vendors, (prefix, index) =>
+        window.requestAnimationFrame = window[prefix + "RequestAnimationFrame"]
+        window.cancelRequestAnimationFrame = window[prefix + "CancelRequestAnimationFrame"]
+
+        # return breaks out of _.each
+        return if window.requestAnimationFrame
+      )
 
     unless window.requestAnimationFrame
       window.requestAnimationFrame = (callback, element) ->
