@@ -6,7 +6,6 @@ class window.AmoebaCD.Clouds
 
     @layers = []
     @objects = []
-    @computedWeights = []
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
@@ -21,7 +20,7 @@ class window.AmoebaCD.Clouds
   generate: () =>
     @objects = []
     @world.removeChild @world.firstChild  while @world.childNodes.length >= 1  if @world.hasChildNodes()
-    @computedWeights = []
+    computedWeights = []
     total = 0
     j = 0
 
@@ -34,7 +33,7 @@ class window.AmoebaCD.Clouds
     while j < @textures.length
       if @textures[j].weight > 0
         w = @textures[j].weight / total
-        @computedWeights.push
+        computedWeights.push
           src: @textures[j].file
           min: accum
           max: accum + w
@@ -44,10 +43,10 @@ class window.AmoebaCD.Clouds
     j = 0
 
     while j < 5
-      @objects.push this.createCloud()
+      @objects.push this.createCloud(computedWeights)
       j++
 
-  createCloud: () =>
+  createCloud: (computedWeights) =>
     div = document.createElement("div")
     div.className = "cloudBase"
     x = 256 - (Math.random() * 512)
@@ -66,14 +65,14 @@ class window.AmoebaCD.Clouds
       src = "troll.png"     # SNG need this image, or fix code
       k = 0
 
-      while k < @computedWeights.length
-        if r >= @computedWeights[k].min and r <= @computedWeights[k].max
+      while k < computedWeights.length
+        if r >= computedWeights[k].min and r <= computedWeights[k].max
           ((img) ->
             img.addEventListener "load", ->
               img.style.opacity = .8
 
           ) cloud
-          src = @computedWeights[k].src
+          src = computedWeights[k].src
         k++
 
       cloud.setAttribute "src", src
