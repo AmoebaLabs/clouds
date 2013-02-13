@@ -22,26 +22,25 @@ class window.AmoebaCD.Clouds
     @world.removeChild @world.firstChild  while @world.childNodes.length >= 1  if @world.hasChildNodes()
     computedWeights = []
     total = 0
-    j = 0
-
-    while j < @textures.length
-      total += @textures[j].weight  if @textures[j].weight > 0
-      j++
     accum = 0
-    j = 0
 
-    while j < @textures.length
-      if @textures[j].weight > 0
-        w = @textures[j].weight / total
+    _.each(@textures, (texture, index) =>
+      total += texture.weight  if texture.weight > 0
+    )
+
+    _.each(@textures, (texture, index) =>
+      if texture.weight > 0
+        w = texture.weight / total
+
         computedWeights.push
-          src: @textures[j].file
+          src: texture.file
           min: accum
           max: accum + w
 
         accum += w
-      j++
-    j = 0
+    )
 
+    j = 0
     while j < 5
       @objects.push this.createCloud(computedWeights)
       j++
@@ -63,17 +62,16 @@ class window.AmoebaCD.Clouds
       cloud.style.opacity = 0
       r = Math.random()
       src = "troll.png"     # SNG need this image, or fix code
-      k = 0
 
-      while k < computedWeights.length
-        if r >= computedWeights[k].min and r <= computedWeights[k].max
+      _.each(computedWeights, (weight, index) =>
+        if r >= weight.min and r <= weight.max
           ((img) ->
             img.addEventListener "load", ->
               img.style.opacity = .8
 
           ) cloud
-          src = computedWeights[k].src
-        k++
+          src = weight.src
+      )
 
       cloud.setAttribute "src", src
       cloud.className = "cloudLayer"
