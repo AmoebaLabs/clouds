@@ -11,39 +11,18 @@ class window.AmoebaCD.Clouds
     this._animate()  # starts the requestAnimationFrame loop
 
   generate: () =>
-    if @world.hasChildNodes()
-      while @world.childNodes.length >= 1
-        @world.removeChild(@world.firstChild)
-
-    total = 0
-    _.each(@textures, (texture, index) =>
-      total += texture.weight  if texture.weight > 0
-    )
-
-    computedWeights = []
-    accum = 0
-    _.each(@textures, (texture, index) =>
-      if texture.weight > 0
-        w = texture.weight / total
-
-        computedWeights.push
-          src: texture.file
-          min: accum
-          max: accum + w
-
-        accum += w
-    )
+    this._clearWorld()
 
     @clouds = []
     for i in [0...@numClusters]
-      @clouds.push(new window.AmoebaCD.Cloud(@world, computedWeights, @fps))
+      @clouds.push(new window.AmoebaCD.Cloud(@world, this._calculateWeights(), @fps))
 
   updateWorld:(worldXAngle, worldYAngle, translateZ) =>
     @worldXAngle = worldXAngle
     @worldYAngle = worldYAngle
     @translateZ = translateZ
 
-    t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"
+    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
     $(@world).css(transform: t)
 
   _animateLayer: () =>
@@ -65,6 +44,34 @@ class window.AmoebaCD.Clouds
       setTimeout(() =>
         this._animateLayer()
       ,1000 / @fps)
+
+
+  _calculateWeights: () =>
+    total = 0
+    _.each(@textures, (texture, index) =>
+      total += texture.weight  if texture.weight > 0
+    )
+
+    result = []
+    accum = 0
+    _.each(@textures, (texture, index) =>
+      if texture.weight > 0
+        w = texture.weight / total
+
+        result.push
+          src: texture.file
+          min: accum
+          max: accum + w
+
+        accum += w
+    )
+
+    return result
+
+  _clearWorld: () =>
+    if @world.hasChildNodes()
+      while @world.childNodes.length >= 1
+        @world.removeChild(@world.firstChild)
 
   _buildTextures: () =>
     result = [
