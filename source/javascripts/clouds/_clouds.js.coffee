@@ -108,17 +108,14 @@ class window.AmoebaCD.Clouds
     # call this first
     requestAnimationFrame(this._animate);
 
-    j = 0
-    while j < @layers.length
-      layer = @layers[j]
-
+    _.each(@layers, (layer, index) =>
       # could add this later
       # layer.style.webkitFilter = 'blur(5px)';
 
       layer.data.a += layer.data.speed
       t = "translateX( " + layer.data.x + "px ) translateY( " + layer.data.y + "px ) translateZ( " + layer.data.z + "px ) rotateY( " + (-@worldYAngle) + "deg ) rotateX( " + (-@worldXAngle) + "deg ) rotateZ( " + layer.data.a + "deg ) scale( " + layer.data.s + ")"
       $(layer).css(transform: t)
-      j++
+    )
 
   # called by requestAnimationFrame to set the next state of animation
   _animate: () =>
