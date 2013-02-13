@@ -10,6 +10,11 @@ window.AmoebaCD ?=
 
 jQuery ($) ->
   AmoebaCD.clouds = new window.AmoebaCD.Clouds()
-  AmoebaCD.options = new window.AmoebaCD.CloudOptions(AmoebaCD.clouds.textures)
 
+  showUI = true
+
+  if showUI
+    AmoebaCD.options = new window.AmoebaCD.CloudOptions(AmoebaCD.clouds.textures)
+  else
+    AmoebaCD.clouds.generate()
 

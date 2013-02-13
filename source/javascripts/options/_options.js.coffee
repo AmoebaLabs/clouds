@@ -72,7 +72,6 @@ class window.AmoebaCD.CloudOptions
       AmoebaCD.clouds.generate()
       e.preventDefault()
 
-
   _setupButtons: () =>
     el = document.getElementById("textureList")
 
@@ -173,11 +172,3 @@ class window.AmoebaCD.CloudOptions
       e.preventDefault()
     )
 
-    textureControls = document.getElementById("textureControls")
-    el = document.getElementById("showTextureControlsBtn").addEventListener("click", (e) =>
-      unless textureControls.style.display is "block"
-        textureControls.style.display = "block"
-      else
-        textureControls.style.display = "none"
-      e.preventDefault()
-    )

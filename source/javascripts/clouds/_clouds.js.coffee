@@ -40,7 +40,7 @@ class window.AmoebaCD.Clouds
         accum += w
     )
 
-    for j in [0..4]
+    for i in [0..4]
       @objects.push this.createCloud(computedWeights)
 
   createCloud: (computedWeights) =>
@@ -213,7 +213,7 @@ class window.AmoebaCD.Clouds
       name: "white cloud"
       file: "/images/cloud.png"
       opacity: 1
-      weight: 0
+      weight: 1
     ,
       name: "dark cloud"
       file: "/images/darkCloud.png"
