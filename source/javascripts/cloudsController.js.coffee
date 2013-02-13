@@ -1,6 +1,6 @@
 class window.AmoebaCD.CloudsController
   constructor:() ->
-    AmoebaCD.clouds = new window.AmoebaCD.Clouds()
+    AmoebaCD.clouds = new window.AmoebaCD.Clouds(24)
 
     showUI = true
 

@@ -1,5 +1,5 @@
 class window.AmoebaCD.Clouds
-  constructor:() ->
+  constructor:(@fps) ->
     @world = $("#world").get(0)
     @viewport = $("#viewport").get(0)
     @textures = this._buildTextures()
@@ -10,7 +10,6 @@ class window.AmoebaCD.Clouds
     @worldYAngle = 0
     @lastTime = 0
     @numClusters = 5
-    @fps = 24    # cpu is high at >= 60
     this._setupRAF()
     this._setupEventListeners()
 
@@ -42,12 +41,7 @@ class window.AmoebaCD.Clouds
 
     @clouds = []
     for i in [0...@numClusters]
-      @clouds.push(this._createCloud(computedWeights))
-
-  _createCloud: (computedWeights) =>
-    result = new window.AmoebaCD.Cloud(@world, computedWeights)
-
-    return result
+      @clouds.push(new window.AmoebaCD.Cloud(@world, computedWeights, @fps))
 
   _updateWorld:() =>
     t = "translateZ( " + @translateZ + "px ) rotateX( " + @worldXAngle + "deg) rotateY( " + @worldYAngle + "deg)"

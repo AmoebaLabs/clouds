@@ -1,6 +1,5 @@
 class window.AmoebaCD.Cloud
-  constructor:(parentDiv, computedWeights) ->
-    @fps = 24    # cpu is high at >= 60
+  constructor:(parentDiv, computedWeights, fps) ->
     @layers = []
 
     div = document.createElement("div")
@@ -48,7 +47,7 @@ class window.AmoebaCD.Cloud
         z: z
         a: a
         s: s
-        speed: ((60/Math.min(@fps, 60)) * .1) * Math.random()
+        speed: ((60/Math.min(fps, 60)) * .1) * Math.random()
 
       t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px ) rotateZ( " + a + "deg ) scale( " + s + " )"
       $(layer).css(transform: t)
@@ -60,7 +59,6 @@ class window.AmoebaCD.Cloud
 
   transformLayers: (angleX, angleY) =>
     _.each(@layers, (layerObj, index) =>
-
       layerObj.data.a += layerObj.data.speed
       t = "translateX( " + layerObj.data.x + "px ) translateY( " + layerObj.data.y + "px ) translateZ( " + layerObj.data.z + "px ) rotateY( " + (-angleY) + "deg ) rotateX( " + (-angleX) + "deg ) rotateZ( " + layerObj.data.a + "deg ) scale( " + layerObj.data.s + ")"
 
