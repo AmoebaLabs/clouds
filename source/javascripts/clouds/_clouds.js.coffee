@@ -181,15 +181,13 @@ class window.AmoebaCD.Clouds
 
   _addClickHandlersToATags:() =>
     links = document.querySelectorAll("a[rel=external]")
-    j = 0
 
-    while j < links.length
-      a = links[j]
-      a.addEventListener "click", ((e) ->
+    _.each(links, (a, index) =>
+      a.addEventListener("click", (e) ->
         window.open @href, "_blank"
         e.preventDefault()
-      ), false
-      j++
+      )
+    )
 
   _setupRAF: () =>
     vendors = ["ms", "moz", "webkit", "o"]
