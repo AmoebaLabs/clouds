@@ -92,7 +92,7 @@ class window.AmoebaCD.Clouds
         z: z
         a: a
         s: s
-        speed: ((60/@fps) * .1) * Math.random()
+        speed: ((60/Math.min(@fps, 60)) * .1) * Math.random()
 
       t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px ) rotateZ( " + a + "deg ) scale( " + s + " )"
       $(cloud).css(transform: t)
