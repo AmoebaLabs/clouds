@@ -145,13 +145,6 @@ class window.AmoebaCD.Clouds
     window.addEventListener "mousewheel", onContainerMouseWheel
     window.addEventListener "DOMMouseScroll", onContainerMouseWheel
 
-    document.getElementById("generateBtn").addEventListener "click", (e) =>
-      this.generate()
-      e.preventDefault()
-
-    window.addEventListener "keydown", (e) =>
-      this.generate()  if e.keyCode is 32
-
     window.addEventListener "mousemove", (e) =>
       # alternate calculation
       # @worldXAngle = -(.1 * ( e.clientY - .5 * window.innerHeight ))

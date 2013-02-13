@@ -17,7 +17,6 @@ class window.AmoebaCD.CloudOptions
 
     this._setupButtons()
     this._setupPresets()
-    this._setupOtherButtons()
     this._setupFullScreenButton()
 
     # show the options div
@@ -113,16 +112,16 @@ class window.AmoebaCD.CloudOptions
       ((id) =>
         btnNone.addEventListener "click", =>
           this._setTextureUsage id, "None"
-
+          AmoebaCD.clouds.generate()
         btnFew.addEventListener "click", =>
           this._setTextureUsage id, "Few"
-
+          AmoebaCD.clouds.generate()
         btnNormal.addEventListener "click", =>
           this._setTextureUsage id, "Normal"
-
+          AmoebaCD.clouds.generate()
         btnLot.addEventListener "click", =>
           this._setTextureUsage id, "Lot"
-
+          AmoebaCD.clouds.generate()
       ) index
 
       li.appendChild span
@@ -164,14 +163,4 @@ class window.AmoebaCD.CloudOptions
         document.body.mozRequestFullScreen()  if document.body.mozRequestFullScreen
         e.preventDefault()
       ), false
-
-  _setupOtherButtons: () =>
-    optionsContent = document.getElementById("optionsContent")
-    el = document.getElementById("closeBtn").addEventListener("click", (e) =>
-      unless optionsContent.style.display is "block"
-        optionsContent.style.display = "block"
-      else
-        optionsContent.style.display = "none"
-      e.preventDefault()
-    )
 
