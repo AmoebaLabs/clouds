@@ -10,7 +10,7 @@ class window.AmoebaCD.Cloud
     x = 256 - (Math.random() * 512)
     y = 256 - (Math.random() * 512)
     z = 256 - (Math.random() * 512)
-    t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px )"
+    t = "translateX(#{x}px) translateY(#{y}px) translateZ(#{z}px)"
     $(div).css(transform: t)
 
     cnt = 5 + Math.round(Math.random() * 10)
@@ -49,7 +49,7 @@ class window.AmoebaCD.Cloud
         s: s
         speed: ((60/Math.min(fps, 60)) * .1) * Math.random()
 
-      t = "translateX( " + x + "px ) translateY( " + y + "px ) translateZ( " + z + "px ) rotateZ( " + a + "deg ) scale( " + s + " )"
+      t = "translateX(#{x}px) translateY(#{y}px) translateZ(#{z}px) rotateZ(#{a}deg) scale(#{s})"
       $(layer).css(transform: t)
 
       div.appendChild layer
@@ -60,7 +60,7 @@ class window.AmoebaCD.Cloud
   transformLayers: (angleX, angleY) =>
     _.each(@layers, (layerObj, index) =>
       layerObj.data.a += layerObj.data.speed
-      t = "translateX( " + layerObj.data.x + "px ) translateY( " + layerObj.data.y + "px ) translateZ( " + layerObj.data.z + "px ) rotateY( " + (-angleY) + "deg ) rotateX( " + (-angleX) + "deg ) rotateZ( " + layerObj.data.a + "deg ) scale( " + layerObj.data.s + ")"
+      t = "translateX(#{layerObj.data.x}px) translateY(#{layerObj.data.y}px) translateZ(#{layerObj.data.z}px) rotateY(#{(-angleY)}deg) rotateX(#{(-angleX)}deg) rotateZ(#{layerObj.data.a}deg) scale(#{layerObj.data.s})"
 
       layerObj.layer.css(transform: t)
     )
