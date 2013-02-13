@@ -17,16 +17,17 @@ class window.AmoebaCD.Clouds
     this._animate()  # starts the requestAnimationFrame loop
 
   generate: () =>
-    @objects = []
-    @world.removeChild @world.firstChild  while @world.childNodes.length >= 1  if @world.hasChildNodes()
-    computedWeights = []
-    total = 0
-    accum = 0
+    if @world.hasChildNodes()
+      while @world.childNodes.length >= 1
+        @world.removeChild(@world.firstChild)
 
+    total = 0
     _.each(@textures, (texture, index) =>
       total += texture.weight  if texture.weight > 0
     )
 
+    computedWeights = []
+    accum = 0
     _.each(@textures, (texture, index) =>
       if texture.weight > 0
         w = texture.weight / total
@@ -39,6 +40,7 @@ class window.AmoebaCD.Clouds
         accum += w
     )
 
+    @objects = []
     for i in [0..4]
       @objects.push this.createCloud(computedWeights)
 
