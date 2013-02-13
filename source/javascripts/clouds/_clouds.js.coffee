@@ -166,12 +166,12 @@ class window.AmoebaCD.Clouds
       this._updateWorld()
 
     window.addEventListener "touchmove", (e) =>
-      ptr = e.changedTouches.length
-      while ptr--
-        touch = e.changedTouches[ptr]
+      _.each(e.changedTouches, (touch, index) =>
         @worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
         @worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
         this._updateWorld()
+      )
+
       e.preventDefault()
 
   _addClickHandlersToATags:() =>
