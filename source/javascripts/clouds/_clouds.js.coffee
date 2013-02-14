@@ -20,8 +20,7 @@ class window.AmoebaCD.Clouds
     @worldYAngle = worldYAngle
     @translateZ = translateZ
 
-    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    $(@world).css(transform: t)
+    @translateWorld = true
 
   _animateLayer: () =>
     # call this first
@@ -30,6 +29,11 @@ class window.AmoebaCD.Clouds
     _.each(@clouds, (cloud, index) =>
       # could add this later
       # cloud.style.webkitFilter = 'blur(5px)';
+
+      if @translateWorld
+        @translateWorld = false
+        t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+        $(@world).css(transform: t)
 
       cloud.transformLayers(@worldXAngle, @worldYAngle)
     )
