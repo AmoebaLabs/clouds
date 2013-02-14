@@ -1,15 +1,16 @@
 class window.AmoebaCD.Clouds
-  constructor:(@world, @fps, @numClusters=5) ->
+  constructor:(@world, @fps, @numClusters=5, animate=true) ->
     @clouds = []
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
 
-    this._animate()  # starts the requestAnimationFrame loop
+    if animate
+      this._animate()  # starts the requestAnimationFrame loop
 
   generate: (clearWorld=true) =>
     if clearWorld
-      this._clearWorld()
+      @world.empty()
 
     @clouds = []
     for i in [0...@numClusters]
@@ -29,7 +30,7 @@ class window.AmoebaCD.Clouds
     if @translateWorld
       @translateWorld = false
       t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-      $(@world).css(transform: t)
+      @world.css(transform: t)
 
     _.each(@clouds, (cloud, index) =>
       # could add this later
@@ -52,9 +53,4 @@ class window.AmoebaCD.Clouds
       setTimeout(() =>
         this._animateLayer()
       ,1000 / @fps)
-
-  _clearWorld: () =>
-    if @world.hasChildNodes()
-      while @world.childNodes.length >= 1
-        @world.removeChild(@world.firstChild)
 

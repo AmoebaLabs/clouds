@@ -1,8 +1,8 @@
 class window.AmoebaCD.CloudsController
   constructor:() ->
-    @world = $("#world").get(0)
-    @sky = $("#sky").get(0)
-    @viewport = $("#viewport").get(0)
+    @world = $("#world")
+    @sky = $("#sky")
+    @viewPort = $("#viewport")
 
     @whiteOut = $('<div/>')
       .css(
@@ -15,7 +15,7 @@ class window.AmoebaCD.CloudsController
         opacity: 0
       )
 
-    @viewport.appendChild @whiteOut.get(0)
+    @whiteOut.appendTo(@viewPort)
 
     @translateZ = 0
     @worldXAngle = 0
@@ -43,7 +43,7 @@ class window.AmoebaCD.CloudsController
         when 68  # 'd' key
           this._hyperspace()
         when 69  # 'e' key
-          this._rotateWorld()
+          this._zoomWorld()
         when 70  # 'f' key
           this._showSky()
         when 71  # 'g' key
@@ -138,7 +138,7 @@ class window.AmoebaCD.CloudsController
 
   _hyperspace: () =>
     t = "translateZ(#{@translateZ+2000}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    $(@world).transition(
+    @world.transition(
       transform: t
       duration: 2600
     )
@@ -149,12 +149,12 @@ class window.AmoebaCD.CloudsController
 
   _reversehyperspace: () =>
     t = "translateZ(#{@translateZ+2000}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    $(@world).css(
+    @world.css(
       transform: t
       duration: 2600
     )
     t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    $(@world).transition(
+    @world.transition(
       transform: t
       duration: 2600
     )
@@ -163,21 +163,31 @@ class window.AmoebaCD.CloudsController
       duration: 600
     )
 
-  _rotateWorld: () =>
-    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle+360}deg) rotateY(#{@worldYAngle+360}deg)"
-    $(@world).transition(
+  _zoomWorld: () =>
+    @translateZ = -4000
+    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    @world.css(
       transform: t
+      opacity: 0.1
+    )
+    @translateZ = 2000
+
+    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    @world.transition(
+      transform: t
+      opacity: 1
+      delay: 400
       duration: 2600
     )
 
   _showSky: () =>
     if not AmoebaCD.skyClouds?
       AmoebaCD.skyClouds = [
-        new window.AmoebaCD.Clouds(@sky, 24, 3)
-        new window.AmoebaCD.Clouds(@sky, 24, 3)
-        new window.AmoebaCD.Clouds(@sky, 24, 2)
-        new window.AmoebaCD.Clouds(@sky, 24, 3)
-        new window.AmoebaCD.Clouds(@sky, 24, 1)
+        new window.AmoebaCD.Clouds(@sky, 24, 3, false)
+        new window.AmoebaCD.Clouds(@sky, 24, 3, false)
+        new window.AmoebaCD.Clouds(@sky, 24, 2, false)
+        new window.AmoebaCD.Clouds(@sky, 24, 3, false)
+        new window.AmoebaCD.Clouds(@sky, 24, 1, false)
       ]
       _.each(AmoebaCD.skyClouds, (element, index) =>
         element.generate(false)
