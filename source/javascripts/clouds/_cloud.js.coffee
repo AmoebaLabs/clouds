@@ -22,12 +22,8 @@ class window.AmoebaCD.Cloud
 
       _.each(computedWeights, (weight, index) =>
         if r >= weight.min and r <= weight.max
-          ((img) ->
-            img.addEventListener "load", ->
-              img.style.opacity = .8
-
-          ) layer
           src = weight.src
+          this._loadLayer(layer)
       )
 
       layer.setAttribute "src", src
@@ -64,3 +60,8 @@ class window.AmoebaCD.Cloud
 
       layerObj.layer.css(transform: t)
     )
+
+  # need the closure on layer, so made it a function
+  _loadLayer: (layer) =>
+    layer.addEventListener "load", ->
+      layer.style.opacity = .8
