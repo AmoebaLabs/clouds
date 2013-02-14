@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/ericam/compass-animation.git
+  revision: 314d7bfb732eb42cb759942d96431f386f3c40a5
+  specs:
+    animation (0.1.alpha.3)
+      compass (>= 0.12.0)
+      sass (>= 3.2.0.alpha.95)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -101,5 +109,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  animation!
   middleman (~> 3.0.11)
+  sass (~> 3.2.5)
   underscore-rails

@@ -1,4 +1,5 @@
 #= require jquery-1.8.2
+#= require jquery.transit
 #= require underscore
 #= require_self
 #= require_tree ./clouds

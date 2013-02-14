@@ -1,6 +1,22 @@
 class window.AmoebaCD.CloudsController
   constructor:() ->
     @world = $("#world").get(0)
+    @viewport = $("#viewport").get(0)
+
+    @whiteOut = $('<div/>')
+      .css(
+        position: 'absolute'
+        backgroundColor: '#fff'
+        top:0
+        left:0
+        height: '100%'
+        width: '100%'
+        opacity: 0
+      )
+
+    @viewport.appendChild @whiteOut.get(0)
+
+
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
@@ -23,6 +39,10 @@ class window.AmoebaCD.CloudsController
       switch (e.keyCode)
         when 32
           AmoebaCD.clouds.generate()
+        when 68  # 'd' key
+          this._hyperspace()
+        when 69  # 'e' key
+          this._rotateWorld()
         when 67  # 'c' key
           # only toggle if AmoebaCD.options exists
           if AmoebaCD.options?
@@ -110,3 +130,25 @@ class window.AmoebaCD.CloudsController
       )
 
       e.preventDefault()
+
+  _hyperspace: () =>
+    t = "translateZ(#{@translateZ+2000}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    $(@world).transition(
+      transform: t
+      duration: 2600
+    )
+    @whiteOut.transition(
+      opacity: 1
+      duration: 2600
+    )
+
+  _rotateWorld: () =>
+    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle+360}deg) rotateY(#{@worldYAngle+360}deg)"
+    $(@world).transition(
+      transform: t
+      duration: 2600
+    )
+
+
+
+

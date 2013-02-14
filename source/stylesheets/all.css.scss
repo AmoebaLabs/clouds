@@ -2,6 +2,10 @@
 
 @import "compass/css3";
 
+// github/ericam/compass-animation gem imports
+@import "animation";
+@import "animation/animate";
+
 // Configure Compass:   (Do I need this?)
 // $experimental-support-for-svg: true;
 
