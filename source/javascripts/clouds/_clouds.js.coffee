@@ -43,7 +43,6 @@ class window.AmoebaCD.Clouds
         this._animateLayer()
       ,1000 / @fps)
 
-
   _clearWorld: () =>
     if @world.hasChildNodes()
       while @world.childNodes.length >= 1
