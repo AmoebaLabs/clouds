@@ -16,7 +16,6 @@ class window.AmoebaCD.CloudsController
 
     @viewport.appendChild @whiteOut.get(0)
 
-
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
