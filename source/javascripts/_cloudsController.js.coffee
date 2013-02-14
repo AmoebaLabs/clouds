@@ -48,6 +48,8 @@ class window.AmoebaCD.CloudsController
           this._showSky()
         when 71  # 'g' key
           this._reversehyperspace()
+        when 72
+          this._showFireball()
         when 67  # 'c' key
           # only toggle if AmoebaCD.options exists
           if AmoebaCD.options?
@@ -195,4 +197,17 @@ class window.AmoebaCD.CloudsController
 
     _.each(AmoebaCD.skyClouds, (element, index) =>
       element.fallFromSky()
+    )
+
+  _showFireball: () =>
+    if not AmoebaCD.fireClouds?
+      AmoebaCD.fireClouds = [
+        new window.AmoebaCD.Clouds(@sky, 24, 2, false)
+      ]
+      _.each(AmoebaCD.fireClouds, (element, index) =>
+        element.generate(false)
+      )
+
+    _.each(AmoebaCD.fireClouds, (element, index) =>
+      element.fireCloud()
     )

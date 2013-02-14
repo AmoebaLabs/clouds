@@ -40,9 +40,12 @@ class window.AmoebaCD.Clouds
 
   fallFromSky: () =>
     _.each(@clouds, (cloud, index) =>
-      # could add this later
-      # cloud.style.webkitFilter = 'blur(5px)';
       cloud.fallFromSky()
+    )
+
+  fireCloud: () =>
+    _.each(@clouds, (cloud, index) =>
+      cloud.fireCloud()
     )
 
   # called by requestAnimationFrame to set the next state of animation

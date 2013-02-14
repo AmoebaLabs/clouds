@@ -15,8 +15,8 @@ class window.AmoebaCD.Cloud
 
     cnt = 5 + Math.round(Math.random() * 10)
     for j in [0...cnt]
-      layer = document.createElement("img")
-      layer.style.opacity = 0
+      layer = $("<img/>")
+      layer.css(opacity: 0)
       r = Math.random()
       src = "troll.png"     # SNG need this image, or fix code
 
@@ -26,8 +26,8 @@ class window.AmoebaCD.Cloud
           this._loadLayer(layer)
       )
 
-      layer.setAttribute "src", src
-      layer.className = "cloudLayer"
+      layer.attr(src: src)
+      layer.addClass("cloudLayer")
 
       x = 256 - (Math.random() * 512)
       y = 256 - (Math.random() * 512)
@@ -46,11 +46,11 @@ class window.AmoebaCD.Cloud
         speed: ((60/Math.min(fps, 60)) * .1) * Math.random()
 
       t = "translateX(#{x}px) translateY(#{y}px) translateZ(#{z}px) rotateZ(#{a}deg) scale(#{s})"
-      $(layer).css(transform: t)
+      layer.css(transform: t)
 
-      $(layer).appendTo(@cloudBase)
+      layer.appendTo(@cloudBase)
       @layers.push
-        layer: $(layer)
+        layer: layer
         data: data
 
   transformLayers: (angleX, angleY) =>
@@ -78,7 +78,29 @@ class window.AmoebaCD.Cloud
       delay: delay
     )
 
+  fireCloud: () =>
+    delay = Math.random() * 100
+    duration = 100 + Math.random() * 100
+
+    _.each(@layers, (layerObj, index) =>
+      zTrans = Math.floor(Math.random() * 500)
+
+      t = "translateZ(#{zTrans}px)"
+      layerObj.transition(
+        transform: t
+        duration: duration
+        delay: delay
+      )
+      t = "translateZ(#{-zTrans}px)"
+      layerObj.transition(
+        transform: t
+        duration: duration
+        delay: delay
+      )
+    )
+
   # need the closure on layer, so made it a function
   _loadLayer: (layer) =>
-    layer.addEventListener "load", ->
-      layer.style.opacity = .8
+    layer.load( () =>
+      layer.css(opacity: 0.8)
+    )
