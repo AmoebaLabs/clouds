@@ -1,6 +1,7 @@
 class window.AmoebaCD.CloudsController
   constructor:() ->
     @world = $("#world").get(0)
+    @sky = $("#sky").get(0)
     @viewport = $("#viewport").get(0)
 
     @whiteOut = $('<div/>')
@@ -43,6 +44,8 @@ class window.AmoebaCD.CloudsController
           this._hyperspace()
         when 69  # 'e' key
           this._rotateWorld()
+        when 70  # 'f' key
+          this._showSky()
         when 67  # 'c' key
           # only toggle if AmoebaCD.options exists
           if AmoebaCD.options?
@@ -149,6 +152,19 @@ class window.AmoebaCD.CloudsController
       duration: 2600
     )
 
+  _showSky: () =>
+    if not AmoebaCD.skyClouds?
+      AmoebaCD.skyClouds = [
+        new window.AmoebaCD.Clouds(@sky, 24, 3)
+        new window.AmoebaCD.Clouds(@sky, 24, 3)
+        new window.AmoebaCD.Clouds(@sky, 24, 2)
+        new window.AmoebaCD.Clouds(@sky, 24, 3)
+        new window.AmoebaCD.Clouds(@sky, 24, 1)
+      ]
+      _.each(AmoebaCD.skyClouds, (element, index) =>
+        element.generate(false)
+      )
 
-
-
+    _.each(AmoebaCD.skyClouds, (element, index) =>
+      element.fallFromSky()
+    )

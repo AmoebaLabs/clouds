@@ -62,3 +62,12 @@ body {
   @include transition(opacity .5s ease-out);
 }
 
+#sky {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  @include transform-style(preserve-3d);
+  pointer-events: none;
+}

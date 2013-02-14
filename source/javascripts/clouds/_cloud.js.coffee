@@ -2,16 +2,16 @@ class window.AmoebaCD.Cloud
   constructor:(parentDiv, computedWeights, fps) ->
     @layers = []
 
-    div = document.createElement("div")
-    div.className = "cloudBase"
+    @cloudBase = $("<div/>")
+      .addClass("cloudBase")
 
-    parentDiv.appendChild(div)
+    @cloudBase.appendTo(parentDiv)
 
     x = 256 - (Math.random() * 512)
     y = 256 - (Math.random() * 512)
     z = 256 - (Math.random() * 512)
     t = "translateX(#{x}px) translateY(#{y}px) translateZ(#{z}px)"
-    $(div).css(transform: t)
+    @cloudBase.css(transform: t)
 
     cnt = 5 + Math.round(Math.random() * 10)
     for j in [0...cnt]
@@ -48,7 +48,7 @@ class window.AmoebaCD.Cloud
       t = "translateX(#{x}px) translateY(#{y}px) translateZ(#{z}px) rotateZ(#{a}deg) scale(#{s})"
       $(layer).css(transform: t)
 
-      div.appendChild layer
+      $(layer).appendTo(@cloudBase)
       @layers.push
         layer: $(layer)
         data: data
@@ -59,6 +59,23 @@ class window.AmoebaCD.Cloud
       t = "translateX(#{layerObj.data.x}px) translateY(#{layerObj.data.y}px) translateZ(#{layerObj.data.z}px) rotateY(#{(-angleY)}deg) rotateX(#{(-angleX)}deg) rotateZ(#{layerObj.data.a}deg) scale(#{layerObj.data.s})"
 
       layerObj.layer.css(transform: t)
+    )
+
+  fallFromSky: () =>
+    left = Math.random() * 1000
+    delay = Math.random() * 1600
+    duration = 1000 + Math.random() * 1000
+
+    t = "translateY(-1000px)"
+    @cloudBase.css(
+      transform: t
+      left: left
+    )
+    t = "translateY(1000px)"
+    @cloudBase.transition(
+      transform: t
+      duration: duration
+      delay: delay
     )
 
   # need the closure on layer, so made it a function

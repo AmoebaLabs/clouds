@@ -1,15 +1,15 @@
 class window.AmoebaCD.Clouds
-  constructor:(@world, @fps) ->
+  constructor:(@world, @fps, @numClusters=5) ->
     @clouds = []
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
-    @numClusters = 5
 
     this._animate()  # starts the requestAnimationFrame loop
 
-  generate: () =>
-    this._clearWorld()
+  generate: (clearWorld=true) =>
+    if clearWorld
+      this._clearWorld()
 
     @clouds = []
     for i in [0...@numClusters]
@@ -26,16 +26,22 @@ class window.AmoebaCD.Clouds
     # call this first
     requestAnimationFrame(this._animate);
 
+    if @translateWorld
+      @translateWorld = false
+      t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+      $(@world).css(transform: t)
+
     _.each(@clouds, (cloud, index) =>
       # could add this later
       # cloud.style.webkitFilter = 'blur(5px)';
-
-      if @translateWorld
-        @translateWorld = false
-        t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-        $(@world).css(transform: t)
-
       cloud.transformLayers(@worldXAngle, @worldYAngle)
+    )
+
+  fallFromSky: () =>
+    _.each(@clouds, (cloud, index) =>
+      # could add this later
+      # cloud.style.webkitFilter = 'blur(5px)';
+      cloud.fallFromSky()
     )
 
   # called by requestAnimationFrame to set the next state of animation
