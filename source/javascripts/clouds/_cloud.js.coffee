@@ -45,20 +45,23 @@ class window.AmoebaCD.Cloud
         s: s
         speed: ((60/Math.min(fps, 60)) * .1) * Math.random()
 
+      # append our data to the jquery object so we can access it later
+      layer.data(data)
+
       t = "translateX(#{x}px) translateY(#{y}px) translateZ(#{z}px) rotateZ(#{a}deg) scale(#{s})"
       layer.css(transform: t)
 
       layer.appendTo(@cloudBase)
-      @layers.push
-        layer: layer
-        data: data
+
+      @layers.push(layer)
 
   transformLayers: (angleX, angleY) =>
-    _.each(@layers, (layerObj, index) =>
-      layerObj.data.a += layerObj.data.speed
-      t = "translateX(#{layerObj.data.x}px) translateY(#{layerObj.data.y}px) translateZ(#{layerObj.data.z}px) rotateY(#{(-angleY)}deg) rotateX(#{(-angleX)}deg) rotateZ(#{layerObj.data.a}deg) scale(#{layerObj.data.s})"
+    _.each(@layers, (layer, index) =>
+      updatedA = layer.data('a') + layer.data('speed')
+      layer.data('a', updatedA)
+      t = "translateX(#{layer.data('x')}px) translateY(#{layer.data('y')}px) translateZ(#{layer.data('z')}px) rotateY(#{(-angleY)}deg) rotateX(#{(-angleX)}deg) rotateZ(#{layer.data('a')}deg) scale(#{layer.data('s')})"
 
-      layerObj.layer.css(transform: t)
+      layer.css(transform: t)
     )
 
   fallFromSky: () =>
@@ -82,17 +85,17 @@ class window.AmoebaCD.Cloud
     delay = Math.random() * 100
     duration = 100 + Math.random() * 100
 
-    _.each(@layers, (layerObj, index) =>
+    _.each(@layers, (layer, index) =>
       zTrans = Math.floor(Math.random() * 500)
 
       t = "translateZ(#{zTrans}px)"
-      layerObj.transition(
+      layer.transition(
         transform: t
         duration: duration
         delay: delay
       )
       t = "translateZ(#{-zTrans}px)"
-      layerObj.transition(
+      layer.transition(
         transform: t
         duration: duration
         delay: delay
