@@ -46,6 +46,8 @@ class window.AmoebaCD.CloudsController
           this._rotateWorld()
         when 70  # 'f' key
           this._showSky()
+        when 71  # 'g' key
+          this._reversehyperspace()
         when 67  # 'c' key
           # only toggle if AmoebaCD.options exists
           if AmoebaCD.options?
@@ -143,6 +145,22 @@ class window.AmoebaCD.CloudsController
     @whiteOut.transition(
       opacity: 1
       duration: 2600
+    )
+
+  _reversehyperspace: () =>
+    t = "translateZ(#{@translateZ+2000}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    $(@world).css(
+      transform: t
+      duration: 2600
+    )
+    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    $(@world).transition(
+      transform: t
+      duration: 2600
+    )
+    @whiteOut.transition(
+      opacity: 0
+      duration: 600
     )
 
   _rotateWorld: () =>

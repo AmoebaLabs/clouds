@@ -71,7 +71,7 @@ class window.AmoebaCD.Cloud
       transform: t
       left: left
     )
-    t = "translateY(1000px)"
+    t = "translateY(2000px)"
     @cloudBase.transition(
       transform: t
       duration: duration
