@@ -1,83 +1,65 @@
 
 class window.AmoebaCD.CloudOptions
-  constructor:(@textures) ->
-    @modes = [
-      name: 'None'
-      weight: 0
-    ,
-      name: 'Few'
-      weight: .3
-    ,
-      name: 'Normal'
-      weight: .7
-    ,
-      name: 'Lot'
-      weight: 1
-    ]
+  constructor:() ->
+    @weights = [ 0, 0.3, 0.7, 1]
 
     this._setupButtons()
     this._setupPresets()
     this._setupFullScreenButton()
 
+    this._refresh()
+
     # show the options div
     $("#options").css(display: "block");
 
-  _setTextureUsage: (id, mode) =>
-    _.each(@modes, (modeSpec, index) =>
-      el = $("#btn" + modeSpec.name + id)
+  _setTextureUsage: (textureIndex, mode) =>
+    weights = AmoebaCD.textures.preset()
 
-      if modeSpec.name is mode
-        el.addClass("active")
-        @textures[id].weight = modeSpec.weight
-      else
-        el.removeClass("active")
-    )
+    weights[textureIndex] = @weights[mode]
+
+    AmoebaCD.textures.setCurrentWeights(weights)
+
+  _refresh: () =>
+    this._syncButtons()
+    AmoebaCD.clouds.generate()
 
   _setupPresets: () =>
     document.getElementById("cloudsPreset").addEventListener "click", (e) =>
-      this._setTextureUsage 0, "Lot"
-      this._setTextureUsage 1, "None"
-      this._setTextureUsage 2, "None"
-      this._setTextureUsage 3, "None"
-      this._setTextureUsage 4, "None"
-      this._setTextureUsage 5, "None"
-      AmoebaCD.clouds.generate()
+      AmoebaCD.textures.setCurrentWeights(AmoebaCD.textures.preset('clouds'))
+      this._refresh()
       e.preventDefault()
 
     document.getElementById("stormPreset").addEventListener "click", (e) =>
-      this._setTextureUsage 0, "None"
-      this._setTextureUsage 1, "None"
-      this._setTextureUsage 2, "Lot"
-      this._setTextureUsage 3, "None"
-      this._setTextureUsage 4, "None"
-      this._setTextureUsage 5, "None"
-      AmoebaCD.clouds.generate()
+      AmoebaCD.textures.setCurrentWeights(AmoebaCD.textures.preset('storm'))
+      this._refresh()
       e.preventDefault()
 
     document.getElementById("boomPreset").addEventListener "click", (e) =>
-      this._setTextureUsage 0, "None"
-      this._setTextureUsage 1, "None"
-      this._setTextureUsage 2, "Lot"
-      this._setTextureUsage 3, "Few"
-      this._setTextureUsage 4, "None"
-      this._setTextureUsage 5, "None"
-      AmoebaCD.clouds.generate()
+      AmoebaCD.textures.setCurrentWeights(AmoebaCD.textures.preset('boom'))
+      this._refresh()
       e.preventDefault()
 
     document.getElementById("bayPreset").addEventListener "click", (e) =>
-      this._setTextureUsage 0, "None"
-      this._setTextureUsage 1, "None"
-      this._setTextureUsage 2, "Normal"
-      this._setTextureUsage 3, "Lot"
-      this._setTextureUsage 4, "Lot"
-      this._setTextureUsage 5, "None"
-      AmoebaCD.clouds.generate()
+      AmoebaCD.textures.setCurrentWeights(AmoebaCD.textures.preset('bay'))
+      this._refresh()
       e.preventDefault()
+
+  _syncButtons: () =>
+    _.each(AmoebaCD.textures.textures(), (texture, textureIndex) =>
+      _.each(@weights, (weight, weightIndex) =>
+        el = $("#btn#{weightIndex}#{textureIndex}")
+
+        if (texture.weight == weight)
+          el.addClass("active")
+        else
+          el.removeClass("active")
+      )
+    )
 
   _setupButtons: () =>
     el = document.getElementById("textureList")
 
-    _.each(@textures, (texture, index) =>
+    _.each(AmoebaCD.textures.textures(), (texture, index) =>
       li = document.createElement("li")
       span = document.createElement("span")
       span.textContent = texture.name
@@ -86,42 +68,42 @@ class window.AmoebaCD.CloudOptions
       div.className = "buttons"
 
       btnNone = document.createElement("a")
-      btnNone.setAttribute "id", "btnNone" + index
+      btnNone.setAttribute "id", "btn0" + index
       btnNone.setAttribute "href", "#"
       btnNone.textContent = "None"
       btnNone.className = "left button"
 
       btnFew = document.createElement("a")
-      btnFew.setAttribute "id", "btnFew" + index
+      btnFew.setAttribute "id", "btn1" + index
       btnFew.setAttribute "href", "#"
       btnFew.textContent = "A few"
       btnFew.className = "middle button"
 
       btnNormal = document.createElement("a")
-      btnNormal.setAttribute "id", "btnNormal" + index
+      btnNormal.setAttribute "id", "btn2" + index
       btnNormal.setAttribute "href", "#"
       btnNormal.textContent = "Some"
       btnNormal.className = "middle button"
 
       btnLot = document.createElement("a")
-      btnLot.setAttribute "id", "btnLot" + index
+      btnLot.setAttribute "id", "btn3" + index
       btnLot.setAttribute "href", "#"
       btnLot.textContent = "A lot"
       btnLot.className = "right button"
 
       ((id) =>
         btnNone.addEventListener "click", =>
-          this._setTextureUsage id, "None"
-          AmoebaCD.clouds.generate()
+          this._setTextureUsage id, 0
+          this._refresh()
         btnFew.addEventListener "click", =>
-          this._setTextureUsage id, "Few"
-          AmoebaCD.clouds.generate()
+          this._setTextureUsage id, 1
+          this._refresh()
         btnNormal.addEventListener "click", =>
-          this._setTextureUsage id, "Normal"
-          AmoebaCD.clouds.generate()
+          this._setTextureUsage id, 2
+          this._refresh()
         btnLot.addEventListener "click", =>
-          this._setTextureUsage id, "Lot"
-          AmoebaCD.clouds.generate()
+          this._setTextureUsage id, 3
+          this._refresh()
       ) index
 
       li.appendChild span
@@ -131,11 +113,7 @@ class window.AmoebaCD.CloudOptions
       div.appendChild btnLot
       li.appendChild div
       el.appendChild li
-      this._setTextureUsage index, "None"
     )
-
-    this._setTextureUsage 0, "Lot"
-    AmoebaCD.clouds.generate()
 
   _setupFullScreenButton: () =>
     el = document.getElementById("fullscreenBtn")

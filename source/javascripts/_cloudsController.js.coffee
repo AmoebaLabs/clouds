@@ -20,11 +20,12 @@ class window.AmoebaCD.CloudsController
     @worldXAngle = 0
     @worldYAngle = 0
 
+    AmoebaCD.textures = new window.AmoebaCD.Textures()
     AmoebaCD.clouds = new window.AmoebaCD.Clouds(@world, 24)
 
     showUI = true
     if showUI
-      AmoebaCD.options = new window.AmoebaCD.CloudOptions(AmoebaCD.clouds.textures)
+      AmoebaCD.options = new window.AmoebaCD.CloudOptions()
     else
       AmoebaCD.clouds.generate()
 

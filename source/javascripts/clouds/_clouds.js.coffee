@@ -1,7 +1,5 @@
 class window.AmoebaCD.Clouds
   constructor:(@world, @fps) ->
-    @textures = this._buildTextures()
-
     @clouds = []
     @translateZ = 0
     @worldXAngle = 0
@@ -15,7 +13,7 @@ class window.AmoebaCD.Clouds
 
     @clouds = []
     for i in [0...@numClusters]
-      @clouds.push(new window.AmoebaCD.Cloud(@world, this._calculateWeights(), @fps))
+      @clouds.push(new window.AmoebaCD.Cloud(@world, AmoebaCD.textures.weightedTextures(), @fps))
 
   updateWorld:(worldXAngle, worldYAngle, translateZ) =>
     @worldXAngle = worldXAngle
@@ -46,64 +44,8 @@ class window.AmoebaCD.Clouds
       ,1000 / @fps)
 
 
-  _calculateWeights: () =>
-    total = 0
-    _.each(@textures, (texture, index) =>
-      total += texture.weight  if texture.weight > 0
-    )
-
-    result = []
-    accum = 0
-    _.each(@textures, (texture, index) =>
-      if texture.weight > 0
-        w = texture.weight / total
-
-        result.push
-          src: texture.file
-          min: accum
-          max: accum + w
-
-        accum += w
-    )
-
-    return result
-
   _clearWorld: () =>
     if @world.hasChildNodes()
       while @world.childNodes.length >= 1
         @world.removeChild(@world.firstChild)
 
-  _buildTextures: () =>
-    result = [
-      name: "white cloud"
-      file: "/images/cloud.png"
-      opacity: 1
-      weight: 1
-    ,
-      name: "dark cloud"
-      file: "/images/darkCloud.png"
-      opacity: 1
-      weight: 0
-    ,
-      name: "smoke cloud"
-      file: "/images/smoke.png"
-      opacity: 1
-      weight: 0
-    ,
-      name: "explosion"
-      file: "/images/explosion.png"
-      opacity: 1
-      weight: 0
-    ,
-      name: "explosion 2"
-      file: "/images/explosion2.png"
-      opacity: 1
-      weight: 0
-    ,
-      name: "box"
-      file: "/images/box.png"
-      opacity: 1
-      weight: 0
-    ]
-
-    return result
