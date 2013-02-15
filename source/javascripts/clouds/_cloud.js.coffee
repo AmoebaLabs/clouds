@@ -15,12 +15,10 @@ class window.AmoebaCD.Cloud
   applyCSS: (css) =>
     @cloudBase.css(css)
 
-  animateCSS: (callback, css, hideWhenDone=false) =>
+  animateCSS: (callback, css, hideTransition) =>
     @cloudBase.transition(css)
-    if hideWhenDone
-      @cloudBase.transition(
-        display: 'none'
-      )
+    if hideTransition?
+      @cloudBase.transition(hideTransition)
 
   applyCSSToLayers: (animate, css) =>
     _.each(@layers, (layer, index) =>

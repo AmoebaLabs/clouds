@@ -46,12 +46,17 @@ class window.AmoebaCD.Clouds
 
     _.each(@clouds, (cloud, index) =>
       # copy object first, transition will remove duration and delay so second cloud will not have those
-      cssCopy = _.extend({}, css)
+      transition = _.extend({}, css)
 
-      # add a callback so we can count down to 0 and call the passed in callback
-      cssCopy.complete = localCallback
+      if hideWhenDone
+        hideTransition =
+          display: 'none'
+          complete: localCallback
+      else
+        # add a callback so we can count down to 0 and call the passed in callback
+        transition.complete = localCallback
 
-      cloud.animateCSS(callback, cssCopy, hideWhenDone)
+      cloud.animateCSS(callback, transition, hideTransition)
     )
 
   applyCSSToLayers: (animate, css) =>

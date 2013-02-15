@@ -12,6 +12,18 @@ class window.AmoebaCD.RocketExhaust extends AmoebaCD.EffectsBase
       new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'bay')
     ]
 
+    @rocket = $('<div/>')
+      .appendTo(@containerDiv)
+      .css(
+        position: 'absolute'
+        height: 100
+        width: 60
+        top: 30
+        zIndex: 1000
+        left: (window.innerWidth / 2) - 30
+        backgroundColor: '#921'
+      )
+
     _.each(@clouds, (element, index) =>
       element.generate(false)
     )
@@ -19,7 +31,7 @@ class window.AmoebaCD.RocketExhaust extends AmoebaCD.EffectsBase
     delay = 0
     _.each(@clouds, (cloud, index) =>
       this._run(cloud, delay)
-      delay += 40
+      delay += 90
     )
 
   _run: (cloud, delay) =>
@@ -33,7 +45,7 @@ class window.AmoebaCD.RocketExhaust extends AmoebaCD.EffectsBase
       transform: t
       scale: 0.2
       opacity: 1
-      display: 'inline'
+      display: 'block'
       left: left
       top: top
     )
@@ -54,7 +66,7 @@ class window.AmoebaCD.RocketExhaust extends AmoebaCD.EffectsBase
     cloud.animateCSS(transitionCallback,
       transform: t
       scale: 0.6
-      opacity: 0.2
+      opacity: 0.4
       duration: duration
       delay: delay
     , true)
