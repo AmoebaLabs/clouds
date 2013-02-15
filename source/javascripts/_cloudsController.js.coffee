@@ -45,7 +45,7 @@ class window.AmoebaCD.CloudsController
         when 69  # 'e' key
           this._zoomWorld()
         when 70  # 'f' key
-          this._showSky()
+          this._showFallingClouds()
         when 71  # 'g' key
           this._reversehyperspace()
         when 72
@@ -182,7 +182,7 @@ class window.AmoebaCD.CloudsController
       duration: 2600
     )
 
-  _showSky: () =>
+  _showFallingClouds: () =>
     if @fallingClouds?
       @fallingClouds.stop()
       @fallingClouds = undefined
