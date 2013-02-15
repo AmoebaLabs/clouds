@@ -185,11 +185,11 @@ class window.AmoebaCD.CloudsController
   _showSky: () =>
     if not AmoebaCD.skyClouds?
       AmoebaCD.skyClouds = [
-        new window.AmoebaCD.Clouds(@sky, 24, 3, false)
-        new window.AmoebaCD.Clouds(@sky, 24, 3, false)
-        new window.AmoebaCD.Clouds(@sky, 24, 2, false)
-        new window.AmoebaCD.Clouds(@sky, 24, 3, false)
-        new window.AmoebaCD.Clouds(@sky, 24, 1, false)
+        new window.AmoebaCD.Clouds(@sky, 24, 3, false, 'bay')
+        new window.AmoebaCD.Clouds(@sky, 24, 3, false, 'storm')
+        new window.AmoebaCD.Clouds(@sky, 24, 2, false, 'boom')
+        new window.AmoebaCD.Clouds(@sky, 24, 3, false, 'bay')
+        new window.AmoebaCD.Clouds(@sky, 24, 1, false, 'boom')
       ]
       _.each(AmoebaCD.skyClouds, (element, index) =>
         element.generate(false)

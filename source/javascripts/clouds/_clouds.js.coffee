@@ -1,5 +1,5 @@
 class window.AmoebaCD.Clouds
-  constructor:(@world, @fps, @numClusters=5, animate=true) ->
+  constructor:(@world, @fps, @numClusters=5, animate=true, @preset='current') ->
     @clouds = []
     @translateZ = 0
     @worldXAngle = 0
@@ -14,7 +14,7 @@ class window.AmoebaCD.Clouds
 
     @clouds = []
     for i in [0...@numClusters]
-      @clouds.push(new window.AmoebaCD.Cloud(@world, AmoebaCD.textures.weightedTextures(), @fps))
+      @clouds.push(new window.AmoebaCD.Cloud(@world, AmoebaCD.textures.weightedTextures(@preset), @fps))
 
   updateWorld:(worldXAngle, worldYAngle, translateZ) =>
     @worldXAngle = worldXAngle
