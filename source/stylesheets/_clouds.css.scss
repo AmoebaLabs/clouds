@@ -59,7 +59,6 @@ body {
   margin-left: -128px;
   margin-top: -128px;
   //border: 1px solid red;
-  @include transition(opacity .5s ease-out);
 }
 
 #sky {

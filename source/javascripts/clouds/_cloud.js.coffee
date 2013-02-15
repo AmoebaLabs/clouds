@@ -22,8 +22,9 @@ class window.AmoebaCD.Cloud
 
       _.each(computedWeights, (weight, index) =>
         if r >= weight.min and r <= weight.max
-          src = weight.src
+          # sets load handler so we fade in after the image is loaded, not before
           this._loadLayer(layer)
+          src = weight.src
       )
 
       layer.attr(src: src)
@@ -105,5 +106,7 @@ class window.AmoebaCD.Cloud
   # need the closure on layer, so made it a function
   _loadLayer: (layer) =>
     layer.load( () =>
-      layer.css(opacity: 0.8)
+      # sets opacity after the image is loaded to fade in
+      duration = Math.random() * 1500
+      layer.transition(opacity: 0.8, duration, 'out')
     )
