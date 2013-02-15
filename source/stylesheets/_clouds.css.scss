@@ -30,7 +30,7 @@ body {
   margin-top: -256px;
   height: 512px;
   width: 512px;
-  //border: 1px solid rgb( 255, 0, 0 );
+  // border: 1px solid red
   @include transform-style(preserve-3d);
   pointer-events: none;
 }
@@ -40,7 +40,7 @@ body {
 }
 
 .cloudBase {
-  //border: 1px solid #ff00ff;
+  // border: 1px solid green;
   position: absolute;
   left: 256px;
   top: 256px;
@@ -51,6 +51,7 @@ body {
 }
 
 .cloudLayer {
+  // border: 1px solid red;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -58,7 +59,6 @@ body {
   height: 256px;
   margin-left: -128px;
   margin-top: -128px;
-  //border: 1px solid red;
 }
 
 #sky {
