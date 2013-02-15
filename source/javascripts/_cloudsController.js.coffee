@@ -58,7 +58,7 @@ class window.AmoebaCD.CloudsController
             else
               $("#options").css(display: "none");
         else
-          console.log(e.keyCode)
+          console.log("keyCode: #{e.keyCode}")
 
   _addClickHandlersToATags: () =>
     links = document.querySelectorAll("a[rel=external]")

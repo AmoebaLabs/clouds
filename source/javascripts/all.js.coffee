@@ -4,6 +4,7 @@
 #= require_self
 #= require_tree ./clouds
 #= require_tree ./options
+#= require ./effects/_effectsBase
 #= require_tree ./effects
 #= require_tree .
 
