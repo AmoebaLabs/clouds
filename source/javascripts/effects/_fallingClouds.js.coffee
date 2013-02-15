@@ -2,17 +2,21 @@
 class window.AmoebaCD.FallingClouds extends AmoebaCD.EffectsBase
   # called from base classes constructor
   setup:() =>
+    fragment = document.createDocumentFragment();
+
     @clouds = [
-      new AmoebaCD.Clouds(@containerDiv, @fps, 3, false, 'bay')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 3, false, 'storm')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 2, false, 'boom')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 3, false, 'bay')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'boom')
+      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'bay')
+      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'storm')
+      new AmoebaCD.Clouds(fragment, @fps, 2, false, 'boom')
+      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'bay')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'boom')
     ]
 
     _.each(@clouds, (element, index) =>
       element.generate(false)
     )
+
+    @containerDiv[0].appendChild(fragment);
 
     delay = 0
     _.each(@clouds, (cloud, index) =>

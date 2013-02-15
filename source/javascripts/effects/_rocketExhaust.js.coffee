@@ -2,15 +2,23 @@
 class window.AmoebaCD.RocketExhaust extends AmoebaCD.EffectsBase
   # called from base classes constructor
   setup:() =>
+    fragment = document.createDocumentFragment();
+
     @clouds = [
-      new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'bay')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'fire')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'fire')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'bay')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'fire')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'fire')
-      new AmoebaCD.Clouds(@containerDiv, @fps, 1, false, 'bay')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'bay')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'fire')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'fire')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'bay')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'fire')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'fire')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'bay')
     ]
+
+    _.each(@clouds, (element, index) =>
+      element.generate(false)
+    )
+
+    @containerDiv[0].appendChild(fragment);
 
     @rocket = $('<div/>')
       .appendTo(@containerDiv)
@@ -23,10 +31,6 @@ class window.AmoebaCD.RocketExhaust extends AmoebaCD.EffectsBase
         left: (window.innerWidth / 2) - 30
         backgroundColor: '#921'
       )
-
-    _.each(@clouds, (element, index) =>
-      element.generate(false)
-    )
 
     delay = 0
     _.each(@clouds, (cloud, index) =>
