@@ -8,6 +8,11 @@ class window.AmoebaCD.Clouds
     if animate
       this._animate()  # starts the requestAnimationFrame loop
 
+  destructor: () =>
+    _.each(@clouds, (cloud, index) =>
+      cloud.destructor()
+    )
+
   generate: (clearWorld=true) =>
     if clearWorld
       @world.empty()
@@ -23,6 +28,22 @@ class window.AmoebaCD.Clouds
 
     @translateWorld = true
 
+  applyCSS: (animate, css) =>
+    _.each(@clouds, (cloud, index) =>
+      # copy object first, transition will remove duration and delay so second cloud will not have those
+      cssCopy = _.extend({}, css)
+
+      cloud.applyCSS(animate, cssCopy)
+    )
+
+  applyCSSToLayers: (animate, css) =>
+    _.each(@clouds, (cloud, index) =>
+      # copy object first, transition will remove duration and delay so second cloud will not have those
+      cssCopy = _.extend({}, css)
+
+      cloud.applyCSSToLayers(animate, cssCopy)
+    )
+
   _animateLayer: () =>
     # call this first
     requestAnimationFrame(this._animate);
@@ -36,16 +57,6 @@ class window.AmoebaCD.Clouds
       # could add this later
       # cloud.style.webkitFilter = 'blur(5px)';
       cloud.transformLayers(@worldXAngle, @worldYAngle)
-    )
-
-  fallFromSky: () =>
-    _.each(@clouds, (cloud, index) =>
-      cloud.fallFromSky()
-    )
-
-  fireCloud: () =>
-    _.each(@clouds, (cloud, index) =>
-      cloud.fireCloud()
     )
 
   # called by requestAnimationFrame to set the next state of animation

@@ -1,8 +1,8 @@
 class window.AmoebaCD.CloudsController
   constructor:() ->
     @world = $("#world")
-    @sky = $("#sky")
     @viewPort = $("#viewport")
+    @fps = 24
 
     @whiteOut = $('<div/>')
       .css(
@@ -22,7 +22,7 @@ class window.AmoebaCD.CloudsController
     @worldYAngle = 0
 
     AmoebaCD.textures = new window.AmoebaCD.Textures()
-    AmoebaCD.clouds = new window.AmoebaCD.Clouds(@world, 24)
+    AmoebaCD.clouds = new window.AmoebaCD.Clouds(@world, @fps)
 
     showUI = true
     if showUI
@@ -183,31 +183,17 @@ class window.AmoebaCD.CloudsController
     )
 
   _showSky: () =>
-    if not AmoebaCD.skyClouds?
-      AmoebaCD.skyClouds = [
-        new window.AmoebaCD.Clouds(@sky, 24, 3, false, 'bay')
-        new window.AmoebaCD.Clouds(@sky, 24, 3, false, 'storm')
-        new window.AmoebaCD.Clouds(@sky, 24, 2, false, 'boom')
-        new window.AmoebaCD.Clouds(@sky, 24, 3, false, 'bay')
-        new window.AmoebaCD.Clouds(@sky, 24, 1, false, 'boom')
-      ]
-      _.each(AmoebaCD.skyClouds, (element, index) =>
-        element.generate(false)
-      )
+    if @fallingClouds?
+      @fallingClouds.stop()
+      @fallingClouds = undefined
 
-    _.each(AmoebaCD.skyClouds, (element, index) =>
-      element.fallFromSky()
-    )
+    @fallingClouds = new AmoebaCD.FallingClouds(@viewPort, @fps)
+
+    setTimeout(() =>
+      if @fallingClouds?
+        @fallingClouds.stop()
+        @fallingClouds = undefined
+    , 8000)
 
   _showFireball: () =>
-    if not AmoebaCD.fireClouds?
-      AmoebaCD.fireClouds = [
-        new window.AmoebaCD.Clouds(@sky, 24, 2, false)
-      ]
-      _.each(AmoebaCD.fireClouds, (element, index) =>
-        element.generate(false)
-      )
-
-    _.each(AmoebaCD.fireClouds, (element, index) =>
-      element.fireCloud()
-    )
+    console.log('coming soon')

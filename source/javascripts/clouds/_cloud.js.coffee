@@ -12,42 +12,18 @@ class window.AmoebaCD.Cloud
       layer.css(transform: t)
     )
 
-  fallFromSky: () =>
-    left = Math.random() * 1000
-    delay = Math.random() * 1600
-    duration = 1000 + Math.random() * 1000
+  applyCSS: (animate, css) =>
+    if animate
+      @cloudBase.transition(css)
+    else
+      @cloudBase.css(css)
 
-    t = "translateY(-1000px)"
-    @cloudBase.css(
-      transform: t
-      left: left
-    )
-    t = "translateY(2000px)"
-    @cloudBase.transition(
-      transform: t
-      duration: duration
-      delay: delay
-    )
-
-  fireCloud: () =>
-    delay = Math.random() * 100
-    duration = 100 + Math.random() * 100
-
+  applyCSSToLayers: (animate, css) =>
     _.each(@layers, (layer, index) =>
-      zTrans = Math.floor(Math.random() * 500)
-
-      t = "translateZ(#{zTrans}px)"
-      layer.transition(
-        transform: t
-        duration: duration
-        delay: delay
-      )
-      t = "translateZ(#{-zTrans}px)"
-      layer.transition(
-        transform: t
-        duration: duration
-        delay: delay
-      )
+      if animate
+        layer.css(css)
+      else
+        layer.transition(css)
     )
 
   # need the closure on layer, so made it a function
@@ -95,8 +71,8 @@ class window.AmoebaCD.Cloud
       z = 100 - (Math.random() * 200)
       a = Math.random() * 360
       s = .25 + Math.random()
-      x *= .2
-      y *= .2
+      x *= .3
+      y *= .3
 
       data =
         x: x
