@@ -31,8 +31,8 @@ class window.AmoebaCD.FallingClouds
     , 1000)
 
   _run: (cloud, delay) =>
-    left = Math.random() * 1000
-    duration = 2000 + Math.random() * 1000
+    left = Math.random() * window.innerWidth
+    duration = 800 + Math.random() * 1000
 
     t = "translateY(-1000px)"
     cloud.applyCSS(false,
@@ -40,7 +40,7 @@ class window.AmoebaCD.FallingClouds
       left: left
     )
 
-    t = "translateY(2000px)"
+    t = "translateY(#{window.innerHeight + 100}px)"
     cloud.applyCSS(true,
       transform: t
       duration: duration
