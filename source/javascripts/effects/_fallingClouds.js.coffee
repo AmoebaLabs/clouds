@@ -24,13 +24,11 @@ class window.AmoebaCD.FallingClouds
   stop:() =>
     @stopped = true
 
-    # delay the removal of the container div so that any animations running have some time to stop
-    # we could call this from the transition complete, but what if it's not running?  This is more fool proof
+  _removeContainerDivFromDOM: () =>
     setTimeout(() =>
-      # remove container from dom so we don't leak divs
       @containerDiv.remove()
       @containerDiv = undefined
-    , 2000)
+    , 1000)
 
   _run: (cloud, delay) =>
     left = Math.random() * 1000
@@ -50,6 +48,8 @@ class window.AmoebaCD.FallingClouds
       complete: () =>
         if not @stopped
           this._run(cloud, delay)  # loops until stopped
+        else
+          this._removeContainerDivFromDOM()
     )
 
 
