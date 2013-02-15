@@ -49,7 +49,7 @@ class window.AmoebaCD.CloudsController
         when 71  # 'g' key
           this._reversehyperspace()
         when 72
-          this._showFireball()
+          this._rocketExhaust()
         when 67  # 'c' key
           # only toggle if AmoebaCD.options exists
           if AmoebaCD.options?
@@ -57,8 +57,8 @@ class window.AmoebaCD.CloudsController
               $("#options").css(display: "block");
             else
               $("#options").css(display: "none");
-        else
-          console.log("keyCode: #{e.keyCode}")
+#        else
+#          console.log("keyCode: #{e.keyCode}")
 
   _addClickHandlersToATags: () =>
     links = document.querySelectorAll("a[rel=external]")
@@ -195,5 +195,15 @@ class window.AmoebaCD.CloudsController
         @fallingClouds = undefined
     , 8000)
 
-  _showFireball: () =>
-    console.log('coming soon')
+  _rocketExhaust: () =>
+    if @rocketExhaust?
+      @rocketExhaust.stop()
+      @rocketExhaust = undefined
+
+    @rocketExhaust = new AmoebaCD.RocketExhaust(@viewPort, @fps)
+
+    setTimeout(() =>
+      if @rocketExhaust?
+        @rocketExhaust.stop()
+        @rocketExhaust = undefined
+    , 8000)

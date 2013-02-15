@@ -2,8 +2,6 @@
 class window.AmoebaCD.FallingClouds extends AmoebaCD.EffectsBase
   # called from base classes constructor
   setup:() =>
-    @numAnimationsCalled = 0
-
     @clouds = [
       new AmoebaCD.Clouds(@containerDiv, @fps, 3, false, 'bay')
       new AmoebaCD.Clouds(@containerDiv, @fps, 3, false, 'storm')
@@ -28,7 +26,7 @@ class window.AmoebaCD.FallingClouds extends AmoebaCD.EffectsBase
     # set the starting point for the transition
     left = Math.random() * window.innerWidth
     t = "translateY(-1000px)"
-    cloud.applyCSS(false,
+    cloud.applyCSS(
       transform: t
       left: left
     )
@@ -36,14 +34,14 @@ class window.AmoebaCD.FallingClouds extends AmoebaCD.EffectsBase
     # don't use the complete: callback since that will get called for
     # every layer this transition is applied to. Send callback to applyCSS
     transitionCallback = () =>
-      @numAnimationsCalled--
+      @numExpectedCallbacks--
       if not @stopped
         this._run(cloud, delay)  # loops until stopped
       else
-        if @numAnimationsCalled == 0
+        if @numExpectedCallbacks == 0
           this._tearDown()
 
-    @numAnimationsCalled++
+    @numExpectedCallbacks++
     duration = 800 + Math.random() * 1000
     t = "translateY(#{window.innerHeight + 100}px)"
     cloud.animateCSS(transitionCallback,

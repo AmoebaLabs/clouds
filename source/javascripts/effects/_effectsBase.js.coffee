@@ -1,6 +1,8 @@
 class window.AmoebaCD.EffectsBase
   constructor: (parentDiv, @fps) ->
     @stopped = false
+    @numExpectedCallbacks = 0
+
     @containerDiv = $('<div/>')
       .addClass('effectsStage')
       .appendTo(parentDiv)
@@ -15,11 +17,7 @@ class window.AmoebaCD.EffectsBase
 
   # subclasses must call when done
   _tearDown: () =>
-    console.log('trea downn')
     setTimeout(() =>
-      if not @containerDiv?
-        debugger
-
       @containerDiv.remove()
       @containerDiv = undefined
     , 1000)

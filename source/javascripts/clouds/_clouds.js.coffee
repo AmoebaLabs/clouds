@@ -28,15 +28,15 @@ class window.AmoebaCD.Clouds
 
     @translateWorld = true
 
-  applyCSS: (animate, css) =>
+  applyCSS: (css) =>
     _.each(@clouds, (cloud, index) =>
       # copy object first, transition will remove duration and delay so second cloud will not have those
       cssCopy = _.extend({}, css)
 
-      cloud.applyCSS(animate, cssCopy)
+      cloud.applyCSS(cssCopy)
     )
 
-  animateCSS: (callback, css) =>
+  animateCSS: (callback, css, hideWhenDone=false) =>
     # add a callback so we can count down to 0 and call the passed in callback
     numCallbacks = @clouds.length
     localCallback = () =>
@@ -51,7 +51,7 @@ class window.AmoebaCD.Clouds
       # add a callback so we can count down to 0 and call the passed in callback
       cssCopy.complete = localCallback
 
-      cloud.animateCSS(callback, cssCopy)
+      cloud.animateCSS(callback, cssCopy, hideWhenDone)
     )
 
   applyCSSToLayers: (animate, css) =>

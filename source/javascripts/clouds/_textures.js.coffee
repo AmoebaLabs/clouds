@@ -75,6 +75,8 @@ class window.AmoebaCD.Textures
         weights = [0,0,1,0.3,0,0]
       when 'bay'
         weights = [0,0,0.7,1,1,0]
+      when 'fire'
+        weights = [0,0,0,1,1,0]
       else
         console.log("not a valid preset: #{preset}")
 
