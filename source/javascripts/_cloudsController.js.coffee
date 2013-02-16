@@ -196,14 +196,14 @@ class window.AmoebaCD.CloudsController
     , 8000)
 
   _rocketExhaust: () =>
-    if @rocketExhaust?
-      @rocketExhaust.stop()
-      @rocketExhaust = undefined
+    if @rocketShip?
+      @rocketShip.stop()
+      @rocketShip = undefined
 
-    @rocketExhaust = new AmoebaCD.RocketExhaust(@viewPort, @fps)
+    @rocketShip = new AmoebaCD.RocketShip(@viewPort, @fps)
 
     setTimeout(() =>
-      if @rocketExhaust?
-        @rocketExhaust.stop()
-        @rocketExhaust = undefined
+      if @rocketShip?
+        @rocketShip.stop()
+        @rocketShip = undefined
     , 8000)
