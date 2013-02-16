@@ -42,7 +42,7 @@ class window.AmoebaCD.Clouds
     localCallback = () =>
       if --numCallbacks == 0
         if typeof callback == 'function'
-          callback.apply(self)
+          callback.call()
 
     _.each(@clouds, (cloud, index) =>
       # copy object first, transition will remove duration and delay so second cloud will not have those

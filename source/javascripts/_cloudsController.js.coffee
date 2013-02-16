@@ -189,6 +189,7 @@ class window.AmoebaCD.CloudsController
 
     @fallingClouds = new AmoebaCD.FallingClouds(@viewPort, @fps)
 
+    # clouds continue to fall for 8 seconds, then we stop it here
     setTimeout(() =>
       if @fallingClouds?
         @fallingClouds.stop()
@@ -196,14 +197,7 @@ class window.AmoebaCD.CloudsController
     , 8000)
 
   _rocketExhaust: () =>
-    if @rocketShip?
-      @rocketShip.stop()
-      @rocketShip = undefined
-
-    @rocketShip = new AmoebaCD.RocketShip(@viewPort, @fps)
-
-    setTimeout(() =>
-      if @rocketShip?
-        @rocketShip.stop()
-        @rocketShip = undefined
-    , 8000)
+    rocketShip = new AmoebaCD.RocketShip(@viewPort, @fps, () =>
+      rocketShip.stop()
+      rocketShip = undefined
+    )

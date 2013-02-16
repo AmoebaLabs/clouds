@@ -29,8 +29,12 @@ class window.AmoebaCD.RocketShip extends AmoebaCD.EffectsBase
       top: -1000
       scale: 1
       duration: duration
-    )
+      complete: () =>
+        this.stop()
 
+        if @callback?
+          @callback.call()
+    )
 
   _runExhaustAnimation: (cloud, delay) =>
     numClouds = @exhaustClouds.length

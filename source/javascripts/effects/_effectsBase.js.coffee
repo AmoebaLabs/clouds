@@ -1,5 +1,5 @@
 class window.AmoebaCD.EffectsBase
-  constructor: (parentDiv, @fps) ->
+  constructor: (parentDiv, @fps, @callback) ->
     @stopped = false
     @numExpectedCallbacks = 0
 
@@ -17,8 +17,6 @@ class window.AmoebaCD.EffectsBase
 
   # subclasses must call when done
   _tearDown: () =>
-    setTimeout(() =>
-      @containerDiv.remove()
-      @containerDiv = undefined
-    , 1000)
+    @containerDiv.remove()
+    @containerDiv = undefined
 
