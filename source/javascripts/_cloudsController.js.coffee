@@ -50,7 +50,7 @@ class window.AmoebaCD.CloudsController
         when 71  # 'g' key
           this._reversehyperspace()
         when 72
-          this._rocketShip()
+          this._showRocketShip()
         when 67  # 'c' key
           # only toggle if AmoebaCD.options exists
           if AmoebaCD.options?
@@ -197,7 +197,7 @@ class window.AmoebaCD.CloudsController
         @fallingClouds = undefined
     , 8000)
 
-  _rocketShip: () =>
+  _showRocketShip: () =>
     rocketShip = new AmoebaCD.RocketShip(@viewPort, @fps, () =>
       rocketShip.stop()
       rocketShip = undefined
