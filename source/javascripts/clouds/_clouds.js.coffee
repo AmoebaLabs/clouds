@@ -21,7 +21,7 @@ class window.AmoebaCD.Clouds
     for i in [0...@numClusters]
       @clouds.push(new window.AmoebaCD.Cloud(@world, AmoebaCD.textures.weightedTextures(@preset), @fps))
 
-  updateWorld:(worldXAngle, worldYAngle, translateZ) =>
+  updateToMatchWorld:(worldXAngle, worldYAngle, translateZ) =>
     @worldXAngle = worldXAngle
     @worldYAngle = worldYAngle
     @translateZ = translateZ

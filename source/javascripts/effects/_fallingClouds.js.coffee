@@ -5,11 +5,11 @@ class window.AmoebaCD.FallingClouds extends AmoebaCD.EffectsBase
     fragment = document.createDocumentFragment();
 
     @clouds = [
-      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'bay')
+      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'clouds')
       new AmoebaCD.Clouds(fragment, @fps, 3, false, 'storm')
-      new AmoebaCD.Clouds(fragment, @fps, 2, false, 'boom')
-      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'bay')
-      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'boom')
+      new AmoebaCD.Clouds(fragment, @fps, 2, false, 'clouds')
+      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'storm')
+      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'clouds')
     ]
 
     _.each(@clouds, (element, index) =>

@@ -66,7 +66,7 @@ class window.AmoebaCD.Textures
 
     switch preset
       when 'current'
-        weights = @currentWeights[..]
+        weights = @currentWeights[..]  # copies array
       when 'clouds'
         weights = [1,0,0,0,0,0]
       when 'storm'
