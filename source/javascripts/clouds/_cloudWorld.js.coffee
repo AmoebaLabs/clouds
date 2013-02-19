@@ -132,7 +132,7 @@ class window.AmoebaCD.CloudWorld
     # call this first
     requestAnimationFrame(this._animate);
 
-    if @automaticallyRotateWorld > 0
+    if @automaticallyRotateWorld
       this.updateWorld(@worldXAngle, @worldYAngle+0.15, @translateZ)
 
     if @translateWorld
@@ -155,5 +155,5 @@ class window.AmoebaCD.CloudWorld
         this._animateLayer()
       ,1000 / @fps)
 
-  slowlyRotateWorld: () =>
-    @automaticallyRotateWorld = 2
+  toggleRotateWorld: () =>
+    @automaticallyRotateWorld = !@automaticallyRotateWorld

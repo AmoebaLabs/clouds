@@ -15,7 +15,6 @@ class window.AmoebaCD.CloudsController
     this._addClickHandlersToATags()
     this._addEventHandlers()
     this._setupRAF()
-    this._slowlyRotateWorld()
     # this._setupEventListenersToMoveWorld()
 
   _addEventHandlers: () =>
@@ -34,6 +33,8 @@ class window.AmoebaCD.CloudsController
           AmoebaCD.cloudWorld.reversehyperspace()
         when 72
           this._showRocketShip()
+        when 73
+          AmoebaCD.cloudWorld.toggleRotateWorld()
         when 67  # 'c' key
           # only toggle if AmoebaCD.options exists
           if AmoebaCD.options?
@@ -149,6 +150,3 @@ class window.AmoebaCD.CloudsController
       rocketShip.stop()
       rocketShip = undefined
     )
-
-  _slowlyRotateWorld: () =>
-    AmoebaCD.cloudWorld.slowlyRotateWorld()
