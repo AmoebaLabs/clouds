@@ -33,7 +33,8 @@ class window.AmoebaCD.CloudsController
     this._addClickHandlersToATags()
     this._addEventHandlers()
     this._setupRAF()
-    this._setupEventListenersToMoveWorld()
+    this._slowlyRotateWorld()
+    # this._setupEventListenersToMoveWorld()
 
   _addEventHandlers: () =>
     window.addEventListener "keydown", (e) =>
@@ -107,7 +108,7 @@ class window.AmoebaCD.CloudsController
       y = e.beta
       @worldXAngle = y
       @worldYAngle = x
-      AmoebaCD.clouds.updateToMatchWorld(@worldXAngle, @worldYAngle, @translateZ)
+      AmoebaCD.clouds.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
 
     # window.addEventListener( 'deviceorientation', orientationhandler, false );
     # window.addEventListener( 'MozOrientation', orientationhandler, false );
@@ -115,7 +116,7 @@ class window.AmoebaCD.CloudsController
     onContainerMouseWheel = (event) =>
       event = (if event then event else window.event)
       @translateZ = @translateZ - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
-      AmoebaCD.clouds.updateToMatchWorld(@worldXAngle, @worldYAngle, @translateZ)
+      AmoebaCD.clouds.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
 
     window.addEventListener "mousewheel", onContainerMouseWheel
     window.addEventListener "DOMMouseScroll", onContainerMouseWheel
@@ -128,13 +129,13 @@ class window.AmoebaCD.CloudsController
       @worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
       @worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
 
-      AmoebaCD.clouds.updateToMatchWorld(@worldXAngle, @worldYAngle, @translateZ)
+      AmoebaCD.clouds.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
 
     window.addEventListener "touchmove", (e) =>
       _.each(e.changedTouches, (touch, index) =>
         @worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
         @worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
-        AmoebaCD.clouds.updateToMatchWorld(@worldXAngle, @worldYAngle, @translateZ)
+        AmoebaCD.clouds.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
       )
 
       e.preventDefault()
@@ -202,3 +203,6 @@ class window.AmoebaCD.CloudsController
       rocketShip.stop()
       rocketShip = undefined
     )
+
+  _slowlyRotateWorld: () =>
+

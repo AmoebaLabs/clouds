@@ -92,7 +92,7 @@ class window.AmoebaCD.RocketShip extends AmoebaCD.EffectsBase
         top: 0
         left: 0
         width: '100%'
-        height: '20%'
+        height: '40%'
         backgroundImage: 'url("' + shipImage + '")'
         backgroundPosition: 'center center'
         backgroundSize: 'contain'
@@ -102,10 +102,10 @@ class window.AmoebaCD.RocketShip extends AmoebaCD.EffectsBase
       .appendTo(@ship)
       .css(
         position: 'absolute'
-        top: '20%'
+        top: '40%'
         left: 0
         width: '100%'
-        height: '80%'
+        height: '60%'
       )
 
     this._addExhaustClouds(fireDiv)
