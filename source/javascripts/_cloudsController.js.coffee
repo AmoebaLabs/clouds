@@ -3,10 +3,6 @@ class window.AmoebaCD.CloudsController
     @viewPort = $("#viewport")
     @fps = 24
 
-    @translateZ = 0
-    @worldXAngle = 0
-    @worldYAngle = 0
-
     AmoebaCD.textures = new AmoebaCD.Textures()
     AmoebaCD.cloudWorld = new AmoebaCD.CloudWorld(@fps)
 
@@ -87,41 +83,49 @@ class window.AmoebaCD.CloudsController
 
   _setupEventListenersToMoveWorld: () =>
     orientationhandler = (e) ->
+      [xAngle, yAngle, zTranslate] = AmoebaCD.cloudWorld.worldState()
+
       if not e.gamma and not e.beta
         e.gamma = -(e.x * (180 / Math.PI))
         e.beta = -(e.y * (180 / Math.PI))
       x = e.gamma
       y = e.beta
-      @worldXAngle = y
-      @worldYAngle = x
-      AmoebaCD.cloudWorld.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
+      xAngle = y
+      yAngle = x
+      AmoebaCD.cloudWorld.updateWorld(xAngle, yAngle, zTranslate)
 
     # window.addEventListener( 'deviceorientation', orientationhandler, false );
     # window.addEventListener( 'MozOrientation', orientationhandler, false );
 
     onContainerMouseWheel = (event) =>
+      [xAngle, yAngle, zTranslate] = AmoebaCD.cloudWorld.worldState()
+
       event = (if event then event else window.event)
-      @translateZ = @translateZ - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
-      AmoebaCD.cloudWorld.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
+      zTranslate = zTranslate - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
+      AmoebaCD.cloudWorld.updateWorld(xAngle, yAngle, zTranslate)
 
     window.addEventListener "mousewheel", onContainerMouseWheel
     window.addEventListener "DOMMouseScroll", onContainerMouseWheel
 
     window.addEventListener "mousemove", (e) =>
       # alternate calculation
-      # @worldXAngle = -(.1 * ( e.clientY - .5 * window.innerHeight ))
-      # @worldYAngle = .1 * ( e.clientX - .5 * window.innerWidth )
+      # xAngle = -(.1 * ( e.clientY - .5 * window.innerHeight ))
+      # yAngle = .1 * ( e.clientX - .5 * window.innerWidth )
 
-      @worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
-      @worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
+      [xAngle, yAngle, zTranslate] = AmoebaCD.cloudWorld.worldState()
 
-      AmoebaCD.cloudWorld.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
+      yAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
+      xAngle = (.5 - (e.clientY / window.innerHeight)) * 180
+
+      AmoebaCD.cloudWorld.updateWorld(xAngle, yAngle, zTranslate)
 
     window.addEventListener "touchmove", (e) =>
+      [xAngle, yAngle, zTranslate] = AmoebaCD.cloudWorld.worldState()
+
       _.each(e.changedTouches, (touch, index) =>
-        @worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
-        @worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
-        AmoebaCD.cloudWorld.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
+        yAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
+        xAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
+        AmoebaCD.cloudWorld.updateWorld(xAngle, yAngle, zTranslate)
       )
 
       e.preventDefault()
@@ -147,4 +151,4 @@ class window.AmoebaCD.CloudsController
     )
 
   _slowlyRotateWorld: () =>
-
+    AmoebaCD.cloudWorld.slowlyRotateWorld()

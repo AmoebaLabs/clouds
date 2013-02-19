@@ -1,5 +1,5 @@
 class window.AmoebaCD.CloudWorld
-  constructor:(@fps, @numClusters=5, animate=true, @preset='current') ->
+  constructor:(@fps, @numClusters=5, @preset='current') ->
     @world = $("#world")
     @viewPort = $("#viewport")
     @clouds = []
@@ -20,8 +20,7 @@ class window.AmoebaCD.CloudWorld
 
     @whiteOut.appendTo(@viewPort)
 
-    if animate
-      this._animate()  # starts the requestAnimationFrame loop
+    this._animate()  # starts the requestAnimationFrame loop
 
   destructor: () =>
     _.each(@clouds, (cloud, index) =>
@@ -35,6 +34,9 @@ class window.AmoebaCD.CloudWorld
     @clouds = []
     for i in [0...@numClusters]
       @clouds.push(new AmoebaCD.Cloud(@world, AmoebaCD.textures.weightedTextures(@preset), @fps))
+
+  worldState: () =>
+    return [@worldXAngle, @worldYAngle, @translateZ]
 
   updateWorld:(worldXAngle, worldYAngle, translateZ) =>
     @worldXAngle = worldXAngle
@@ -130,6 +132,9 @@ class window.AmoebaCD.CloudWorld
     # call this first
     requestAnimationFrame(this._animate);
 
+    if @automaticallyRotateWorld > 0
+      this.updateWorld(@worldXAngle, @worldYAngle+0.15, @translateZ)
+
     if @translateWorld
       @translateWorld = false
       t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
@@ -150,4 +155,5 @@ class window.AmoebaCD.CloudWorld
         this._animateLayer()
       ,1000 / @fps)
 
-
+  slowlyRotateWorld: () =>
+    @automaticallyRotateWorld = 2
