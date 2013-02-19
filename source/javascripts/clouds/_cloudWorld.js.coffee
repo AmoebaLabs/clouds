@@ -1,9 +1,24 @@
-class window.AmoebaCD.Clouds
-  constructor:(@world, @fps, @numClusters=5, animate=true, @preset='current') ->
+class window.AmoebaCD.CloudWorld
+  constructor:(@fps, @numClusters=5, animate=true, @preset='current') ->
+    @world = $("#world")
+    @viewPort = $("#viewport")
     @clouds = []
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
+
+    @whiteOut = $('<div/>')
+      .css(
+        position: 'absolute'
+        backgroundColor: '#fff'
+        top:0
+        left:0
+        height: '100%'
+        width: '100%'
+        opacity: 0
+      )
+
+    @whiteOut.appendTo(@viewPort)
 
     if animate
       this._animate()  # starts the requestAnimationFrame loop
@@ -19,7 +34,7 @@ class window.AmoebaCD.Clouds
 
     @clouds = []
     for i in [0...@numClusters]
-      @clouds.push(new window.AmoebaCD.Cloud(@world, AmoebaCD.textures.weightedTextures(@preset), @fps))
+      @clouds.push(new AmoebaCD.Cloud(@world, AmoebaCD.textures.weightedTextures(@preset), @fps))
 
   updateWorld:(worldXAngle, worldYAngle, translateZ) =>
     @worldXAngle = worldXAngle
@@ -56,7 +71,7 @@ class window.AmoebaCD.Clouds
         # add a callback so we can count down to 0 and call the passed in callback
         transition.complete = localCallback
 
-      cloud.animateCSS(callback, transition, hideTransition)
+      cloud.animateCSS(transition, hideTransition)
     )
 
   applyCSSToLayers: (animate, css) =>
@@ -65,6 +80,50 @@ class window.AmoebaCD.Clouds
       cssCopy = _.extend({}, css)
 
       cloud.applyCSSToLayers(animate, cssCopy)
+    )
+
+  hyperspace: () =>
+    t = "translateZ(#{@translateZ+2000}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    @world.transition(
+      transform: t
+      duration: 2600
+    )
+    @whiteOut.transition(
+      opacity: 1
+      duration: 2600
+    )
+
+  reversehyperspace: () =>
+    t = "translateZ(#{@translateZ+2000}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    @world.css(
+      transform: t
+      duration: 2600
+    )
+    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    @world.transition(
+      transform: t
+      duration: 2600
+    )
+    @whiteOut.transition(
+      opacity: 0
+      duration: 600
+    )
+
+  zoomWorld: () =>
+    @translateZ = -4000
+    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    @world.css(
+      transform: t
+      opacity: 0.1
+    )
+    @translateZ = 2000
+
+    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
+    @world.transition(
+      transform: t
+      opacity: 1
+      delay: 400
+      duration: 2600
     )
 
   _animateLayer: () =>
@@ -90,4 +149,5 @@ class window.AmoebaCD.Clouds
       setTimeout(() =>
         this._animateLayer()
       ,1000 / @fps)
+
 

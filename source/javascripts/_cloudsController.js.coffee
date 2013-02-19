@@ -1,34 +1,20 @@
 class window.AmoebaCD.CloudsController
   constructor:() ->
-    @world = $("#world")
     @viewPort = $("#viewport")
     @fps = 24
-
-    @whiteOut = $('<div/>')
-      .css(
-        position: 'absolute'
-        backgroundColor: '#fff'
-        top:0
-        left:0
-        height: '100%'
-        width: '100%'
-        opacity: 0
-      )
-
-    @whiteOut.appendTo(@viewPort)
 
     @translateZ = 0
     @worldXAngle = 0
     @worldYAngle = 0
 
-    AmoebaCD.textures = new window.AmoebaCD.Textures()
-    AmoebaCD.clouds = new window.AmoebaCD.Clouds(@world, @fps)
+    AmoebaCD.textures = new AmoebaCD.Textures()
+    AmoebaCD.cloudWorld = new AmoebaCD.CloudWorld(@fps)
 
     showUI = true
     if showUI
-      AmoebaCD.options = new window.AmoebaCD.CloudOptions()
+      AmoebaCD.options = new AmoebaCD.CloudOptions()
     else
-      AmoebaCD.clouds.generate()
+      AmoebaCD.cloudWorld.generate()
 
     this._addClickHandlersToATags()
     this._addEventHandlers()
@@ -41,15 +27,15 @@ class window.AmoebaCD.CloudsController
       # keycodes are always the uppercase character's ascii code
       switch (e.keyCode)
         when 32
-          AmoebaCD.clouds.generate()
+          AmoebaCD.cloudWorld.generate()
         when 68  # 'd' key
-          this._hyperspace()
+          AmoebaCD.cloudWorld.hyperspace()
         when 69  # 'e' key
-          this._zoomWorld()
+          AmoebaCD.cloudWorld.zoomWorld()
         when 70  # 'f' key
           this._showFallingClouds()
         when 71  # 'g' key
-          this._reversehyperspace()
+          AmoebaCD.cloudWorld.reversehyperspace()
         when 72
           this._showRocketShip()
         when 67  # 'c' key
@@ -108,7 +94,7 @@ class window.AmoebaCD.CloudsController
       y = e.beta
       @worldXAngle = y
       @worldYAngle = x
-      AmoebaCD.clouds.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
+      AmoebaCD.cloudWorld.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
 
     # window.addEventListener( 'deviceorientation', orientationhandler, false );
     # window.addEventListener( 'MozOrientation', orientationhandler, false );
@@ -116,7 +102,7 @@ class window.AmoebaCD.CloudsController
     onContainerMouseWheel = (event) =>
       event = (if event then event else window.event)
       @translateZ = @translateZ - ((if event.detail then event.detail * -5 else event.wheelDelta / 8))
-      AmoebaCD.clouds.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
+      AmoebaCD.cloudWorld.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
 
     window.addEventListener "mousewheel", onContainerMouseWheel
     window.addEventListener "DOMMouseScroll", onContainerMouseWheel
@@ -129,60 +115,16 @@ class window.AmoebaCD.CloudsController
       @worldYAngle = -(.5 - (e.clientX / window.innerWidth)) * 180
       @worldXAngle = (.5 - (e.clientY / window.innerHeight)) * 180
 
-      AmoebaCD.clouds.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
+      AmoebaCD.cloudWorld.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
 
     window.addEventListener "touchmove", (e) =>
       _.each(e.changedTouches, (touch, index) =>
         @worldYAngle = -(.5 - (touch.pageX / window.innerWidth)) * 180
         @worldXAngle = (.5 - (touch.pageY / window.innerHeight)) * 180
-        AmoebaCD.clouds.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
+        AmoebaCD.cloudWorld.updateWorld(@worldXAngle, @worldYAngle, @translateZ)
       )
 
       e.preventDefault()
-
-  _hyperspace: () =>
-    t = "translateZ(#{@translateZ+2000}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    @world.transition(
-      transform: t
-      duration: 2600
-    )
-    @whiteOut.transition(
-      opacity: 1
-      duration: 2600
-    )
-
-  _reversehyperspace: () =>
-    t = "translateZ(#{@translateZ+2000}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    @world.css(
-      transform: t
-      duration: 2600
-    )
-    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    @world.transition(
-      transform: t
-      duration: 2600
-    )
-    @whiteOut.transition(
-      opacity: 0
-      duration: 600
-    )
-
-  _zoomWorld: () =>
-    @translateZ = -4000
-    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    @world.css(
-      transform: t
-      opacity: 0.1
-    )
-    @translateZ = 2000
-
-    t = "translateZ(#{@translateZ}px) rotateX(#{@worldXAngle}deg) rotateY(#{@worldYAngle}deg)"
-    @world.transition(
-      transform: t
-      opacity: 1
-      delay: 400
-      duration: 2600
-    )
 
   _showFallingClouds: () =>
     if @fallingClouds?

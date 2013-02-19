@@ -5,16 +5,12 @@ class window.AmoebaCD.FallingClouds extends AmoebaCD.EffectsBase
     fragment = document.createDocumentFragment();
 
     @clouds = [
-      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'clouds')
-      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'storm')
-      new AmoebaCD.Clouds(fragment, @fps, 2, false, 'clouds')
-      new AmoebaCD.Clouds(fragment, @fps, 3, false, 'storm')
-      new AmoebaCD.Clouds(fragment, @fps, 1, false, 'clouds')
+      new AmoebaCD.Cloud(fragment, AmoebaCD.textures.weightedTextures('clouds'), @fps)
+      new AmoebaCD.Cloud(fragment, AmoebaCD.textures.weightedTextures('storm'), @fps)
+      new AmoebaCD.Cloud(fragment, AmoebaCD.textures.weightedTextures('clouds'), @fps)
+      new AmoebaCD.Cloud(fragment, AmoebaCD.textures.weightedTextures('storm'), @fps)
+      new AmoebaCD.Cloud(fragment, AmoebaCD.textures.weightedTextures('clouds'), @fps)
     ]
-
-    _.each(@clouds, (element, index) =>
-      element.generate(false)
-    )
 
     @containerDiv[0].appendChild(fragment);
 
@@ -48,10 +44,11 @@ class window.AmoebaCD.FallingClouds extends AmoebaCD.EffectsBase
     @numExpectedCallbacks++
     duration = 800 + Math.random() * 1000
     t = "translateY(#{window.innerHeight + 100}px)"
-    cloud.animateCSS(transitionCallback,
+    cloud.animateCSS(
       transform: t
       duration: duration
       delay: delay
+      complete: transitionCallback
     )
 
 

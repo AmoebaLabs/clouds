@@ -21,7 +21,7 @@ class window.AmoebaCD.CloudOptions
 
   _refresh: () =>
     this._syncButtons()
-    AmoebaCD.clouds.generate()
+    AmoebaCD.cloudWorld.generate()
 
   _setupPresets: () =>
     document.getElementById("cloudsPreset").addEventListener "click", (e) =>

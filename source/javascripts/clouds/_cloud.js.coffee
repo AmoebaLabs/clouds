@@ -15,7 +15,7 @@ class window.AmoebaCD.Cloud
   applyCSS: (css) =>
     @cloudBase.css(css)
 
-  animateCSS: (callback, css, hideTransition) =>
+  animateCSS: (css, hideTransition) =>
     @cloudBase.transition(css)
     if hideTransition?
       @cloudBase.transition(hideTransition)

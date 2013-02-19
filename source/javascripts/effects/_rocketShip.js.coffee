@@ -61,13 +61,14 @@ class window.AmoebaCD.RocketShip extends AmoebaCD.EffectsBase
 
     @numExpectedCallbacks++
     duration = 300
-    cloud.animateCSS(transitionCallback,
+    cloud.animateCSS(
       top: 233
       scale: 0.6
       opacity: 0.4
       duration: duration
       delay: delay
-    , true)
+      complete: transitionCallback
+    )
 
   _buildShip: (parentDiv) =>
     @ship = $('<div/>')
@@ -112,15 +113,12 @@ class window.AmoebaCD.RocketShip extends AmoebaCD.EffectsBase
 
   _addExhaustClouds: (parentDiv) =>
     @exhaustClouds = [
-      new AmoebaCD.Clouds(parentDiv, @fps, 1, false, 'bay')
-      new AmoebaCD.Clouds(parentDiv, @fps, 1, false, 'fire')
-      new AmoebaCD.Clouds(parentDiv, @fps, 1, false, 'fire')
-      new AmoebaCD.Clouds(parentDiv, @fps, 1, false, 'bay')
-      new AmoebaCD.Clouds(parentDiv, @fps, 1, false, 'fire')
-      new AmoebaCD.Clouds(parentDiv, @fps, 1, false, 'fire')
-      new AmoebaCD.Clouds(parentDiv, @fps, 1, false, 'bay')
+      new AmoebaCD.Cloud(parentDiv, AmoebaCD.textures.weightedTextures('bay'), @fps)
+      new AmoebaCD.Cloud(parentDiv, AmoebaCD.textures.weightedTextures('fire'), @fps)
+      new AmoebaCD.Cloud(parentDiv, AmoebaCD.textures.weightedTextures('fire'), @fps)
+      new AmoebaCD.Cloud(parentDiv, AmoebaCD.textures.weightedTextures('bay'), @fps)
+      new AmoebaCD.Cloud(parentDiv, AmoebaCD.textures.weightedTextures('fire'), @fps)
+      new AmoebaCD.Cloud(parentDiv, AmoebaCD.textures.weightedTextures('fire'), @fps)
+      new AmoebaCD.Cloud(parentDiv, AmoebaCD.textures.weightedTextures('bay'), @fps)
+      new AmoebaCD.Cloud(parentDiv, AmoebaCD.textures.weightedTextures('bay'), @fps)
     ]
-
-    _.each(@exhaustClouds, (element, index) =>
-      element.generate(false)
-    )
